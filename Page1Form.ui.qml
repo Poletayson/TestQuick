@@ -47,6 +47,11 @@ Page {
         padding: 10
     }
 
+    //    Column {
+    //        id: columnList
+    //        //anchors.margins: 10
+    //        anchors.fill: parent
+    //        spacing: 30
     ListView {
         id: view
         anchors.rightMargin: 10
@@ -59,41 +64,111 @@ Page {
         spacing: 10
         model: dataModel
 
-        delegate: Rectangle {
+        clip: true
+
+        highlight: Rectangle {
+            color: "skyblue"
+        }
+        highlightFollowsCurrentItem: true
+
+        section.property: "date"
+        section.delegate: Rectangle {
+            //            anchors.topMargin: 35
+            //            anchors.bottomMargin: 30
             width: view.width
-            height: 80
-            color: model.color
+            height: 20
+            color: "lightgray"
+            Text {
+                anchors.centerIn: parent
+                renderType: Text.NativeRendering
+                font.bold: true
+                text: section
+            }
+        }
 
-            GridLayout {
-                id: row
+        delegate: Item {
+            id: itemDelegate
 
-                rows: 3
-                flow: GridLayout.TopToBottom
+            width: view.width
+            height: 60
+
+            property var view: ListView.view
+            property var isCurrent: ListView.isCurrentItem
+
+            Rectangle {
+
+                color: model.color
+                radius: height / 3
                 anchors.fill: parent
 
-                Text {
-                    Layout.alignment: instead
+                GridLayout {
+                    id: row
 
-                    renderType: Text.NativeRendering
-                    text: model.date
-                    font.pixelSize: 14
+                    rows: 3
+                    flow: GridLayout.TopToBottom
+                    anchors.fill: parent
+
+                    Text {
+
+                        //Layout.alignment: instead
+                        renderType: Text.NativeRendering
+                        text: model.date
+                        font.pixelSize: 14
+                    }
+
+                    Text {
+                        Layout.rowSpan: 3
+                        Layout.leftMargin: 20
+
+                        renderType: Text.NativeRendering
+                        // @disable-check M222
+                        text: "%1%2".arg(model.name).arg(isCurrent ? "*" : "")
+                        Layout.fillWidth: true
+                        font.pixelSize: 18
+                    }
+
+                    RoundButton {
+
+                        Layout.rowSpan: 3
+                        Layout.rightMargin: 8
+                        icon.source: "/Images/backet.png"
+                    }
                 }
+                MouseArea {
+                    anchors.fill: parent
 
-                Text {
-                    Layout.rowSpan: 3
-                    Layout.leftMargin: 20
+                    onClicked: view.currentIndex = model.index
 
-                    renderType: Text.NativeRendering
-                    text: model.name
-                    Layout.fillWidth: true
-                    font.pixelSize: 18
+                    // @disable-check M223
+                    onDoubleClicked: {
+
+                    }
                 }
+            }
+        }
 
-                RoundButton {
+        footer: Rectangle {
+            id: button
 
-                    Layout.rowSpan: 3
-                    icon.source: "/Images/backet.png"
-                }
+            width: view.width
+            height: 40
+            radius: height / 3
+            //anchors.horizontalCenter: parent.horizontalCenter
+            border {
+                color: "black"
+                width: 1
+            }
+
+            Text {
+                anchors.centerIn: parent
+                renderType: Text.NativeRendering
+                text: "Add"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                // @disable-check M222
+                onClicked: dataModel.append({})
             }
         }
     }
