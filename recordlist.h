@@ -2,10 +2,13 @@
 #define RECORD_H
 
 #include <QAbstractListModel>
+#include <QModelIndex>
+#include <QVariant>
 #include <QStringList>
 #include <QList>
 #include <QDate>
 #include <QHash>
+#include <QByteArray>
 
 class Record: public QAbstractListModel
 {
@@ -17,13 +20,20 @@ public:
         IsBougtRole
     };
 
-    explicit Record(QObject *parent = nullptr);
+    Record(QObject *parent = nullptr);
 
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QHash<int, QByteArray> roleNames() const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
+
 
     Q_INVOKABLE void add();
+
+    Q_INVOKABLE void add(const QString name);
+//    Q_INVOKABLE bool isBought();
+//    Q_INVOKABLE void isBoughtChange();
 
 signals:
 
@@ -33,7 +43,7 @@ private:
     QStringList names;
     QList <int> lists;
     QList <bool> isBoughtMarks;
-    QHash<int, QByteArray> roles;
+    //QHash<int, QByteArray> roles;
 };
 
 

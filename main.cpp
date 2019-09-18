@@ -12,25 +12,25 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-//    QQmlApplicationEngine engine;
-//    const QUrl url(QStringLiteral("qrc:/main.qml"));
-//    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
-//                     &app, [url](QObject *obj, const QUrl &objUrl) {
-//        if (!obj && url == objUrl)
-//            QCoreApplication::exit(-1);
-//    }, Qt::QueuedConnection);
+    QQmlApplicationEngine engine;
+    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
+                     &app, [url](QObject *obj, const QUrl &objUrl) {
+        if (!obj && url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
 
-    QQuickView view;
 
+//    QQuickView view;
     Record records;
-    view.rootContext()->setContextProperty("records", &records);    //set records model
-     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));
-     view.show();
+    //records.add("Хлеб");
+//    view.rootContext()->setContextProperty("records", &records);    //set records model
+//     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));
+//     view.show();
 
 
-
-//    engine.setProperty("records", records);//rootContext();
-//    engine.load(url);
+    engine.rootContext()->setContextProperty("records", &records);
+    engine.load(url);
 
     return app.exec();
 }

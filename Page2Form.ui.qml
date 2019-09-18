@@ -3,8 +3,10 @@ import QtQuick.Controls 2.13
 import QtQuick.Layouts 1.3
 
 Page {
+    id: page
     width: 600
     height: 400
+    property var recordsList
 
     header: Label {
         text: qsTr("Page 2")
@@ -17,26 +19,25 @@ Page {
         anchors.centerIn: parent
     }
 
-    ListModel {
-        id: dataModel
+    //    ListModel {
+    //        id: dataModel
 
-        ListElement {
-            date: "13.09.19"
-            product: "Хлеб"
-            isBought: true
-        }
-        ListElement {
-            date: "12.09.19"
-            product: "Молоко"
-            isBought: false
-        }
-        ListElement {
-            date: "11.09.19"
-            product: "Горошек"
-            isBought: false
-        }
-    }
-
+    //        ListElement {
+    //            date: "13.09.19"
+    //            product: "Хлеб"
+    //            isBought: true
+    //        }
+    //        ListElement {
+    //            date: "12.09.19"
+    //            product: "Молоко"
+    //            isBought: false
+    //        }
+    //        ListElement {
+    //            date: "11.09.19"
+    //            product: "Горошек"
+    //            isBought: false
+    //        }
+    //    }
     ListView {
         id: view
         anchors.rightMargin: 10
@@ -47,7 +48,7 @@ Page {
         anchors.margins: 10
         anchors.fill: parent
         spacing: 10
-        model: dataModel
+        model: recordsList //dataModel
 
         clip: true
 
@@ -66,17 +67,11 @@ Page {
             property var isCurrent: ListView.isCurrentItem
 
             Rectangle {
-
-                color: model.isBought ? "#E0FFE0" : "#F0F0F0"
+                color: recordsList.isBought ? "#E0FFE0" : "#F0F0F0"
                 radius: height / 3
                 anchors.fill: parent
 
-                //                Row {
-                //                    id: row
-
-                //                    anchors.fill: parent
                 Text {
-                    //anchors.leftMargin: 20
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 5
@@ -84,8 +79,7 @@ Page {
                     //- buttonDeletePosition.width
                     renderType: Text.NativeRendering
                     // @disable-check M222
-                    text: "%1%2".arg(model.product).arg(isCurrent ? "*" : "")
-
+                    text: model.position
                     font.pixelSize: 16
                 }
 
@@ -101,18 +95,25 @@ Page {
             MouseArea {
                 anchors.fill: parent
 
-                onClicked: view.currentIndex = model.index
+                // @disable-check M223
+                onClicked: {
+                    // @disable-check M222
+                    console.log("Щелчок по ", model.index, " итему")
+                    model.isBought = true
+                    view.currentIndex = model.index
+                    model.position = "Edited"
+                }
 
                 // @disable-check M223
                 onDoubleClicked: {
-
+                    model.isBought = true //!model.isBought
                 }
             }
             //}
         }
 
         footer: Rectangle {
-            id: button
+            id: addingBlock
 
             width: view.width
             height: 40
@@ -124,21 +125,59 @@ Page {
             }
 
             Text {
-                anchors.centerIn: parent
+                id: labelName
+
                 renderType: Text.NativeRendering
-                text: "Add"
+                font.pixelSize: 14
+                text: "Название"
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
             }
 
-            MouseArea {
-                anchors.fill: parent
-                // @disable-check M222
-                onClicked: dataModel.append({})
+            TextInput {
+                id: textInputAddingName
+
+                anchors.verticalCenter: parent.verticalCenter
+
+                text: qsTr("Название")
+                anchors.left: labelName.left
+                anchors.leftMargin: 15
+                font.pixelSize: 14
+            }
+
+            Rectangle {
+                id: buttonAddRecord
+
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: textInputAddingName.right
+                anchors.right: parent.right
+                //width: parent.width
+                height: 30
+                radius: height / 3
+                //anchors.horizontalCenter: parent.horizontalCenter
+                border {
+                    color: "black"
+                    width: 1
+                }
+                Text {
+                    anchors.centerIn: parent
+                    renderType: Text.NativeRendering
+                    text: "Add"
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    // @disable-check M223
+                    onClicked: {
+
+                        // @disable-check M222
+                        recordsList.add(textInputAddingName.text.toString())
+                        // @disable-check M222
+                        console.log("Добавили, теперь " + recordsList.rowCount())
+                    } //dataModel.append({})
+                }
             }
         }
     }
-
-    //    Connections {
-    //        target: textInputMain
-    //        onTextEdited: print("clicked")
-    //    }
 }

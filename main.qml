@@ -21,6 +21,7 @@ ApplicationWindow {
 
         Page2Form {
             id: page2
+            recordsList: records
         }
     }
 
