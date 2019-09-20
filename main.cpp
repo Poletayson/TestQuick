@@ -22,14 +22,14 @@ int main(int argc, char *argv[])
 
 
 //    QQuickView view;
-    Record records;
+    QAbstractListModel *records = new Record;
     //records.add("Хлеб");
 //    view.rootContext()->setContextProperty("records", &records);    //set records model
 //     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));
 //     view.show();
 
 
-    engine.rootContext()->setContextProperty("records", &records);
+    engine.rootContext()->setContextProperty("records", records);
     engine.load(url);
 
     return app.exec();

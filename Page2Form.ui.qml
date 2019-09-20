@@ -6,8 +6,8 @@ Page {
     id: page
     width: 600
     height: 400
-    property var recordsList
 
+    //property var recordsList
     header: Label {
         text: qsTr("Page 2")
         font.pixelSize: Qt.application.font.pixelSize * 2
@@ -48,7 +48,7 @@ Page {
         anchors.margins: 10
         anchors.fill: parent
         spacing: 10
-        model: recordsList //dataModel
+        model: records //dataModel
 
         clip: true
 
@@ -67,7 +67,7 @@ Page {
             property var isCurrent: ListView.isCurrentItem
 
             Rectangle {
-                color: recordsList.isBought ? "#E0FFE0" : "#F0F0F0"
+                color: model.isBought ? "#E0FFE0" : "#F0F0F0"
                 radius: height / 3
                 anchors.fill: parent
 
@@ -97,16 +97,15 @@ Page {
 
                 // @disable-check M223
                 onClicked: {
-                    // @disable-check M222
-                    console.log("Щелчок по ", model.index, " итему")
-                    model.isBought = true
+//                    console.log("Щелчок по ", model.index, " итему")
+//                    model.isBought = true
                     view.currentIndex = model.index
-                    model.position = "Edited"
+//                    model.position = "Edited"
                 }
 
                 // @disable-check M223
                 onDoubleClicked: {
-                    model.isBought = true //!model.isBought
+                    model.isBought = !model.isBought
                 }
             }
             //}
@@ -170,12 +169,9 @@ Page {
                     anchors.fill: parent
                     // @disable-check M223
                     onClicked: {
-
                         // @disable-check M222
-                        recordsList.add(textInputAddingName.text.toString())
-                        // @disable-check M222
-                        console.log("Добавили, теперь " + recordsList.rowCount())
-                    } //dataModel.append({})
+                        records.add(textInputAddingName.text.toString())
+                    }
                 }
             }
         }

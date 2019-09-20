@@ -168,7 +168,9 @@ Page {
             MouseArea {
                 anchors.fill: parent
                 // @disable-check M222
-                onClicked: dataModel.append({})
+                onClicked: dataModel.append({
+
+                                            })
             }
         }
     }

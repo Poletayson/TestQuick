@@ -9,14 +9,14 @@ Record::Record(QObject *parent) : QAbstractListModel(parent)
 
 
     names.append("Test");
-    isBoughtMarks.append(true);
+    isBoughtMarks.append(false);
     lists.append(0);
 }
 
 int Record::rowCount(const QModelIndex &parent) const
 {
-    if (!parent.isValid())
-        return 0;
+//    if (!parent.isValid())
+//        return 0;
     return names.size();
 }
 

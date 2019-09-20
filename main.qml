@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+
 import QtQuick.VirtualKeyboard 2.4
 
 ApplicationWindow {
@@ -9,10 +10,12 @@ ApplicationWindow {
     height: 480
     title: qsTr("Tabs")
 
+
     SwipeView {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
+        //records
 
 
         Page1Form {
@@ -21,9 +24,10 @@ ApplicationWindow {
 
         Page2Form {
             id: page2
-            recordsList: records
+            //recordsList: records
         }
     }
+
 
     footer: TabBar {
         id: tabBar
@@ -36,6 +40,7 @@ ApplicationWindow {
             text: qsTr("Page 2")
         }
     }
+
 
     InputPanel {
         id: inputPanel
