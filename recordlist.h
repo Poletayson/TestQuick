@@ -10,7 +10,7 @@
 #include <QHash>
 #include <QByteArray>
 
-class Record: public QAbstractListModel
+class Records: public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -20,24 +20,20 @@ public:
         IsBougtRole
     };
 
-    Record(QObject *parent = 0);
+    Records(QObject *parent = nullptr);
 
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QHash<int, QByteArray> roleNames() const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
-
-
-    Q_INVOKABLE void add();
-
-    Q_INVOKABLE void add(const QString name);
-//    Q_INVOKABLE bool isBought();
-//    Q_INVOKABLE void isBoughtChange();
 
 signals:
 
 public slots:
+    void add(const QString name);
+    virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
 
 private:
     QStringList names;
@@ -47,24 +43,35 @@ private:
 };
 
 
-class RecordList : public QAbstractListModel
+class Plans : public QAbstractListModel
 {
     Q_OBJECT
 public:
     enum Roles {
         DateRole = Qt::UserRole + 1,
-        NameRole
+        NameRole,
+        IdRole
     };
 
-    explicit RecordList(QObject *parent = nullptr);
+    explicit Plans(QObject *parent = nullptr);
+
+    virtual int rowCount(const QModelIndex &parent) const;
+    virtual QVariant data(const QModelIndex &index, int role) const;
+    virtual QHash<int, QByteArray> roleNames() const;
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+    virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
 signals:
 
 public slots:
+    void add(const QString name, const QString date);
+    virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
 
 private:
+    QList <int> ids;
     QStringList names;
-    QList <QDate> dates;
+    QStringList dates;
     QHash<int, QByteArray> roles;
 };
 

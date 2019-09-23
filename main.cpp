@@ -3,6 +3,7 @@
 #include <QQuickView>
 #include <QQmlContext>
 #include <recordlist.h>
+#include <dataaccessor.h>
 
 int main(int argc, char *argv[])
 {
@@ -22,7 +23,8 @@ int main(int argc, char *argv[])
 
 
 //    QQuickView view;
-    QAbstractListModel *records = new Record;
+    DataAccessor da;
+    QAbstractListModel *records = new Records;
     //records.add("Хлеб");
 //    view.rootContext()->setContextProperty("records", &records);    //set records model
 //     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));

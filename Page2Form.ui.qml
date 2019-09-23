@@ -97,10 +97,10 @@ Page {
 
                 // @disable-check M223
                 onClicked: {
-//                    console.log("Щелчок по ", model.index, " итему")
-//                    model.isBought = true
+                    //                    console.log("Щелчок по ", model.index, " итему")
+                    //                    model.isBought = true
                     view.currentIndex = model.index
-//                    model.position = "Edited"
+                    //                    model.position = "Edited"
                 }
 
                 // @disable-check M223
@@ -115,7 +115,7 @@ Page {
             id: addingBlock
 
             width: view.width
-            height: 40
+            height: 60
             radius: height / 3
             //anchors.horizontalCenter: parent.horizontalCenter
             border {
@@ -123,37 +123,50 @@ Page {
                 width: 1
             }
 
-            Text {
-                id: labelName
+            Column {
+                id: columnInputPosition
 
-                renderType: Text.NativeRendering
-                font.pixelSize: 14
-                text: "Название"
-                anchors.top: parent.top
-                anchors.topMargin: 10
-                anchors.left: parent.left
-                anchors.leftMargin: 10
-            }
+                height: parent.height
+                width: parent.width - 100
 
-            TextInput {
-                id: textInputAddingName
+                Text {
+                    id: labelName
+                    color: "#363636"
 
-                anchors.verticalCenter: parent.verticalCenter
+                    renderType: Text.NativeRendering
+                    font.pixelSize: 12
 
-                text: qsTr("Название")
-                anchors.left: labelName.left
-                anchors.leftMargin: 15
-                font.pixelSize: 14
+                    text: "Название"
+                    fontSizeMode: Text.VerticalFit
+                    anchors.top: parent.top
+                    anchors.topMargin: 5
+                    anchors.left: parent.left
+                    anchors.leftMargin: 5
+                }
+
+                TextInput {
+                    id: textInputAddingName
+
+                    //                    anchors.top: labelName.bottom
+                    //                    anchors.topMargin: 5
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    text: qsTr("Название")
+
+                    font.pixelSize: 14
+                }
             }
 
             Rectangle {
                 id: buttonAddRecord
 
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.left: textInputAddingName.right
+                anchors.left: columnInputPosition.right
                 anchors.right: parent.right
                 //width: parent.width
                 height: 30
+                //width: 100
                 radius: height / 3
                 //anchors.horizontalCenter: parent.horizontalCenter
                 border {
@@ -163,7 +176,7 @@ Page {
                 Text {
                     anchors.centerIn: parent
                     renderType: Text.NativeRendering
-                    text: "Add"
+                    text: "Добавить"
                 }
                 MouseArea {
                     anchors.fill: parent

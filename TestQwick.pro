@@ -1,4 +1,4 @@
-QT += quick #virtualkeyboard
+QT += quick virtualkeyboard sql
 
 
 #QMAKE_LFLAGS += -nostdlib
@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        dataaccessor.cpp \
         main.cpp \
         recordlist.cpp
 
@@ -38,4 +39,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 HEADERS += \
+    dataaccessor.h \
     recordlist.h
