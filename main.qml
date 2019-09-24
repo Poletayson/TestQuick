@@ -26,6 +26,10 @@ ApplicationWindow {
             id: page2
             //recordsList: records
         }
+
+//        onIndexChanged: {
+//            records.fillRecords(0);
+//        }
     }
 
 

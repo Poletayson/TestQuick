@@ -1,67 +1,73 @@
 #include "recordlist.h"
 
-Records::Records(QObject *parent) : QAbstractListModel(parent)
+RecordsList::RecordsList(DataAccessor *daA, QObject *parent) : QAbstractListModel(parent)
 {
-//    roles = QAbstractListModel::roleNames();
-//    roles[ListRole] = "list";
-//    roles[NameRole] = "name";
-//    roles[IsBougtRole] = "isBougt";
+    roles = QAbstractListModel::roleNames();
+    roles[PlanRole] = "plan";
+    roles[NameRole] = "name";
+    roles[IdRole] = "id";
+    roles[IsBougtRole] = "isBougt";
 
-
-    names.append("Test");
-    isBoughtMarks.append(false);
-    lists.append(0);
+    da = daA;
+//    names.append("Test");
+//    isBoughtMarks.append(false);
+//    lists.append(0);
 }
 
-int Records::rowCount(const QModelIndex &parent) const
+int RecordsList::rowCount(const QModelIndex &parent) const
 {
 //    if (!parent.isValid())
 //        return 0;
-    return names.size();
+    return records.count();//names.size();
 }
 
-QVariant Records::data(const QModelIndex &index, int role) const
+QVariant RecordsList::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
     }
 
     switch (role) {
+    case IdRole:
+        return records.at(index.row()).getId();
     case NameRole:
-        return names.at(index.row());
+        return records.at(index.row()).getName();
     case PlanRole:
-        return lists.at(index.row());
+        return records.at(index.row()).getPlanId();
     case IsBougtRole:
-        return isBoughtMarks.at(index.row());
+        return records.at(index.row()).getIsBought();
     default:
         return QVariant();
     }
 }
 
-QHash<int, QByteArray> Records::roleNames() const
+QHash<int, QByteArray> RecordsList::roleNames() const
 {
-    QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
-    roles[NameRole] = "position";
-    roles[PlanRole] = "listShoping";
-    roles[IsBougtRole] = "isBought";
+//    QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
+//    roles[NameRole] = "position";
+//    roles[PlanRole] = "listShoping";
+//    roles[IsBougtRole] = "isBought";
 
     return roles;
 }
 
-bool Records::setData(const QModelIndex &index, const QVariant &value, int role)
+bool RecordsList::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()){
         return false;
     }
 
     switch (role) {
-    case PlanRole:
+    case IdRole:
         return false;   // This property can not be set
+    case PlanRole:
+        records[index.row()].setPlanId(value.toInt());
+        break;
     case NameRole:
-        names[index.row()] = value.toString();
+        records[index.row()].setName(value.toString());
         break;
     case IsBougtRole:
-        isBoughtMarks[index.row()] = value.toBool();
+        records[index.row()].setIsBought(value.toBool());
         break;
     default:
         return false;
@@ -72,20 +78,26 @@ bool Records::setData(const QModelIndex &index, const QVariant &value, int role)
     return true;
 }
 
-bool Records::removeRow(int row, const QModelIndex &parent)
+bool RecordsList::removeRow(int row, const QModelIndex &parent)
 {
-    if (row < names.count()){
+    if (row < records.count()){
         beginRemoveRows(QModelIndex(), row, row);
-        names.removeAt(row);
-        lists.removeAt(row);
-        isBoughtMarks.removeAt(row);
+        records.removeAt(row);
+        endRemoveRows();
         return true;
     }
 
     return false;
 }
 
-Qt::ItemFlags Records::flags(const QModelIndex &index) const
+void RecordsList::fillRecords(int planId)
+{
+    records = da->getRecordsList(planId);
+    beginInsertRows(QModelIndex(), 0, records.size());
+    endInsertRows();
+}
+
+Qt::ItemFlags RecordsList::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsEnabled;
@@ -94,56 +106,60 @@ Qt::ItemFlags Records::flags(const QModelIndex &index) const
 }
 
 
-void Records::add(const QString name)
+void RecordsList::add(const QString name, int planId)
 {
-    beginInsertRows(QModelIndex(), names.size(), names.size());
-    names.append(name);
-    lists.append(0);
-    isBoughtMarks.append(false);
-    endInsertRows();
+    Record record = da->insertRecord(name, false, planId);
 
-    //m_data[0] = QString("Size: %1").arg(m_data.size());
-    QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
-    emit dataChanged(index, createIndex(names.size()-1, 0, static_cast<void *>(0)));
+    if (record.getId() != -1)
+    {
+        beginInsertRows(QModelIndex(), records.size(), records.size());
+        records.append(record);
+        endInsertRows();
+
+        QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
+        emit dataChanged(index, createIndex(records.size()-1, 0, static_cast<void *>(0)));
+    }
 }
 
-Plans::Plans(QObject *parent) : QAbstractListModel(parent)
+PlansList::PlansList(DataAccessor *daA, QObject *parent) : QAbstractListModel(parent)
 {
     roles = QAbstractListModel::roleNames();
     roles[NameRole] = "name";
     roles[DateRole] = "date";
     roles[IdRole] = "id";
+
+    da = daA;
 }
 
-int Plans::rowCount(const QModelIndex &parent) const
+int PlansList::rowCount(const QModelIndex &parent) const
 {
-    return names.size();
+    return plans.size();
 }
 
-QVariant Plans::data(const QModelIndex &index, int role) const
+QVariant PlansList::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
     }
 
     switch (role) {
-    case NameRole:
-        return names.at(index.row());
-    case DateRole:
-        return dates.at(index.row());
     case IdRole:
-        return ids.at(index.row());
+        return plans[index.row()].getId();
+    case NameRole:
+        return plans[index.row()].getName();
+    case DateRole:
+        return plans[index.row()].getDate();
     default:
         return QVariant();
     }
 }
 
-QHash<int, QByteArray> Plans::roleNames() const
+QHash<int, QByteArray> PlansList::roleNames() const
 {
     return roles;
 }
 
-bool Plans::setData(const QModelIndex &index, const QVariant &value, int role)
+bool PlansList::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if (!index.isValid()){
         return false;
@@ -153,10 +169,10 @@ bool Plans::setData(const QModelIndex &index, const QVariant &value, int role)
     case IdRole:
         return false;   // This property can not be set
     case NameRole:
-        names[index.row()] = value.toString();
+        plans[index.row()].setName(value.toString());
         break;
     case DateRole:
-        dates[index.row()] = value.toString();
+        plans[index.row()].setDate(value.toString());
         break;
     default:
         return false;
@@ -167,7 +183,7 @@ bool Plans::setData(const QModelIndex &index, const QVariant &value, int role)
     return true;
 }
 
-Qt::ItemFlags Plans::flags(const QModelIndex &index) const
+Qt::ItemFlags PlansList::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::ItemIsEnabled;
@@ -175,17 +191,24 @@ Qt::ItemFlags Plans::flags(const QModelIndex &index) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
-void Plans::add(const QString name, const QString date, int id)
+void PlansList::add(const QString name, const QString date, int id)
 {
-    beginInsertRows(QModelIndex(), names.size(), names.size());
-    names.append(name);
-    dates.append(date);
-    //isBoughtMarks.append(false);
-    endInsertRows();
+    Plan plan = da->insertPlan(name, date);
 
-    //m_data[0] = QString("Size: %1").arg(m_data.size());
-    QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
-    emit dataChanged(index, createIndex(names.size()-1, 0, static_cast<void *>(0)));
+    if (plan.getId() != -1)
+    {
+        beginInsertRows(QModelIndex(), plans.size(), plans.size());
+        plans.append(plan);
+        endInsertRows();
+
+        QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
+        emit dataChanged(index, createIndex(plans.size()-1, 0, static_cast<void *>(0)));
+    }
+}
+
+bool PlansList::removeRow(int row, const QModelIndex &parent)
+{
+
 }
 
 

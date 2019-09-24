@@ -23,9 +23,9 @@ int main(int argc, char *argv[])
 
 
 //    QQuickView view;
-    DataAccessor da;
-    QAbstractListModel *records = new Records;
-    QAbstractListModel *plans = new Plans;
+    DataAccessor *da = new DataAccessor ();
+    QAbstractListModel *records = new RecordsList (da);
+    QAbstractListModel *plans = new PlansList (da);
     //records.add("Хлеб");
 //    view.rootContext()->setContextProperty("records", &records);    //set records model
 //     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));

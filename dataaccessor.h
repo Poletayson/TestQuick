@@ -1,8 +1,9 @@
 #ifndef DATAACCESSOR_H
 #define DATAACCESSOR_H
 
-#include "recordlist.h"
+//#include "recordlist.h"
 #include <QtSql>
+#include <QDebug>
 
 class Plan
 {
@@ -54,6 +55,9 @@ public:
     DataAccessor();
     QList <Plan> getPlansList ();
     Plan insertPlan (const QString name, const QString date);
+
+    QList <Record> getRecordsList (const int planId);
+    Record insertRecord (const QString name, const bool isBought, const int planId);
 private:
     QSqlDatabase dataBase;
 };

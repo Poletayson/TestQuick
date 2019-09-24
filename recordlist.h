@@ -9,11 +9,11 @@
 #include <QDate>
 #include <QHash>
 #include <QByteArray>
-//#include <dataaccessor.h>
+#include <dataaccessor.h>
 
 
 
-class Records: public QAbstractListModel
+class RecordsList: public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -24,7 +24,7 @@ public:
         IsBougtRole
     };
 
-    Records(QObject *parent = nullptr);
+    RecordsList(DataAccessor *daA, QObject *parent = nullptr);
 
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
@@ -36,18 +36,21 @@ public:
 signals:
 
 public slots:
-    void add(const QString name);
+    void add(const QString name, int planId);
     virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
+    void fillRecords (int planId);
 
 private:
-    QStringList names;
-    QList <int> lists;
-    QList <bool> isBoughtMarks;
-    //QHash<int, QByteArray> roles;
+//    QStringList names;
+//    QList <int> lists;
+//    QList <bool> isBoughtMarks;
+    QList <Record> records;
+    DataAccessor *da;
+    QHash<int, QByteArray> roles;
 };
 
 
-class Plans : public QAbstractListModel
+class PlansList : public QAbstractListModel
 {
     Q_OBJECT
 public:
@@ -57,7 +60,7 @@ public:
         IdRole
     };
 
-    explicit Plans(QObject *parent = nullptr);
+    explicit PlansList(DataAccessor *daA, QObject *parent = nullptr);
 
     virtual int rowCount(const QModelIndex &parent) const;
     virtual QVariant data(const QModelIndex &index, int role) const;
@@ -73,10 +76,13 @@ public slots:
     virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
 
 private:
-    QList <int> ids;
-    QStringList names;
-    QStringList dates;
+    QList <Plan> plans;
+    DataAccessor *da;
     QHash<int, QByteArray> roles;
+
+//    QList <int> ids;
+//    QStringList names;
+//    QStringList dates;
 };
 
 #endif // RECORD_H

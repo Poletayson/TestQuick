@@ -57,6 +57,8 @@ Page {
         }
         highlightFollowsCurrentItem: true
 
+        property int planId: 0
+
         delegate: Item {
             id: itemDelegate
 
@@ -65,6 +67,8 @@ Page {
 
             property var view: ListView.view
             property var isCurrent: ListView.isCurrentItem
+            property int id: model.id
+
 
             Rectangle {
                 color: model.isBought ? "#E0FFE0" : "#F0F0F0"
@@ -79,7 +83,7 @@ Page {
                     //- buttonDeletePosition.width
                     renderType: Text.NativeRendering
                     // @disable-check M222
-                    text: model.position
+                    text: model.name
                     font.pixelSize: 16
                 }
 
@@ -183,10 +187,11 @@ Page {
                     // @disable-check M223
                     onClicked: {
                         // @disable-check M222
-                        records.add(textInputAddingName.text.toString())
+                        records.add(textInputAddingName.text.toString(), view.planId)
                     }
                 }
             }
         }
     }
+
 }
