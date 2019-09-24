@@ -25,6 +25,7 @@ int main(int argc, char *argv[])
 //    QQuickView view;
     DataAccessor da;
     QAbstractListModel *records = new Records;
+    QAbstractListModel *plans = new Plans;
     //records.add("Хлеб");
 //    view.rootContext()->setContextProperty("records", &records);    //set records model
 //     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));
@@ -32,6 +33,7 @@ int main(int argc, char *argv[])
 
 
     engine.rootContext()->setContextProperty("records", records);
+    engine.rootContext()->setContextProperty("plans", plans);
     engine.load(url);
 
     return app.exec();

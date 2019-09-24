@@ -9,14 +9,18 @@
 #include <QDate>
 #include <QHash>
 #include <QByteArray>
+//#include <dataaccessor.h>
+
+
 
 class Records: public QAbstractListModel
 {
     Q_OBJECT
 public:
     enum Roles {
-        ListRole = Qt::UserRole + 1,
+        PlanRole = Qt::UserRole + 1,
         NameRole,
+        IdRole,
         IsBougtRole
     };
 
@@ -65,7 +69,7 @@ public:
 signals:
 
 public slots:
-    void add(const QString name, const QString date);
+    void add(const QString name, const QString date, int id);
     virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
 
 private:

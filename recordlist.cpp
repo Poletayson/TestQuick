@@ -29,7 +29,7 @@ QVariant Records::data(const QModelIndex &index, int role) const
     switch (role) {
     case NameRole:
         return names.at(index.row());
-    case ListRole:
+    case PlanRole:
         return lists.at(index.row());
     case IsBougtRole:
         return isBoughtMarks.at(index.row());
@@ -42,7 +42,7 @@ QHash<int, QByteArray> Records::roleNames() const
 {
     QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
     roles[NameRole] = "position";
-    roles[ListRole] = "listShoping";
+    roles[PlanRole] = "listShoping";
     roles[IsBougtRole] = "isBought";
 
     return roles;
@@ -55,7 +55,7 @@ bool Records::setData(const QModelIndex &index, const QVariant &value, int role)
     }
 
     switch (role) {
-    case ListRole:
+    case PlanRole:
         return false;   // This property can not be set
     case NameRole:
         names[index.row()] = value.toString();
@@ -175,7 +175,7 @@ Qt::ItemFlags Plans::flags(const QModelIndex &index) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
-void Plans::add(const QString name, const QString date)
+void Plans::add(const QString name, const QString date, int id)
 {
     beginInsertRows(QModelIndex(), names.size(), names.size());
     names.append(name);
@@ -187,3 +187,5 @@ void Plans::add(const QString name, const QString date)
     QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
     emit dataChanged(index, createIndex(names.size()-1, 0, static_cast<void *>(0)));
 }
+
+
