@@ -72,8 +72,9 @@ public:
 signals:
 
 public slots:
-    void add(const QString name, const QString date, int id);
+    void add(const QString name, const QString date);
     virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
+    void fillPlans ();
 
 private:
     QList <Plan> plans;

@@ -92,8 +92,10 @@ bool RecordsList::removeRow(int row, const QModelIndex &parent)
 
 void RecordsList::fillRecords(int planId)
 {
+    beginRemoveRows(QModelIndex(), 0, records.size() - 1);
+    endRemoveRows();
     records = da->getRecordsList(planId);
-    beginInsertRows(QModelIndex(), 0, records.size());
+    beginInsertRows(QModelIndex(), 0, records.size() - 1);
     endInsertRows();
 }
 
@@ -133,7 +135,7 @@ PlansList::PlansList(DataAccessor *daA, QObject *parent) : QAbstractListModel(pa
 
 int PlansList::rowCount(const QModelIndex &parent) const
 {
-    return plans.size();
+    return plans.count();
 }
 
 QVariant PlansList::data(const QModelIndex &index, int role) const
@@ -191,7 +193,7 @@ Qt::ItemFlags PlansList::flags(const QModelIndex &index) const
     return QAbstractListModel::flags(index) | Qt::ItemIsEditable;
 }
 
-void PlansList::add(const QString name, const QString date, int id)
+void PlansList::add(const QString name, const QString date)
 {
     Plan plan = da->insertPlan(name, date);
 
@@ -209,6 +211,13 @@ void PlansList::add(const QString name, const QString date, int id)
 bool PlansList::removeRow(int row, const QModelIndex &parent)
 {
 
+}
+
+void PlansList::fillPlans()
+{
+    plans = da->getPlansList();
+    beginInsertRows(QModelIndex(), 0, plans.size() - 1);
+    endInsertRows();
 }
 
 

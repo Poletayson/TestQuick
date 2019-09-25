@@ -15,19 +15,30 @@ ApplicationWindow {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
-        //records
+
+        interactive: false
 
 
         Page1Form {
             id: page1
+
+            onPlanClicked: {
+                page2.planId = id
+                records.fillRecords(id)
+                swipeView.currentIndex = 1
+            }
+
+
         }
 
         Page2Form {
             id: page2
-            //recordsList: records
+
+            onBack: swipeView.currentIndex = 0
         }
 
-//        onIndexChanged: {
+//        onCurrentIndexChanged: {
+
 //            records.fillRecords(0);
 //        }
     }
@@ -74,4 +85,9 @@ ApplicationWindow {
             }
         }
     }
+    Component.onCompleted: {
+        plans.fillPlans();
+    }
 }
+
+

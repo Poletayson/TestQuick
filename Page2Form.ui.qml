@@ -7,11 +7,51 @@ Page {
     width: 600
     height: 400
 
-    //property var recordsList
-    header: Label {
-        text: qsTr("Page 2")
-        font.pixelSize: Qt.application.font.pixelSize * 2
-        padding: 10
+    property var planId
+
+    signal back
+
+    header: Row {
+
+        anchors.left: parent.left
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.leftMargin: 10
+        anchors.rightMargin: 10
+        anchors.topMargin: 10
+
+        height: labelHeader.font.pixelSize
+
+        Rectangle {
+            id: buttonBackToPlans
+
+            height: 40
+            width: 40
+            //radius: height / 3
+            //anchors.horizontalCenter: parent.horizontalCenter
+            border {
+                color: "black"
+                width: 1
+            }
+            Text {
+                anchors.centerIn: parent
+                renderType: Text.NativeRendering
+                text: "Назад"
+            }
+            MouseArea {
+                anchors.fill: parent
+                // @disable-check M222
+                onClicked: back()
+            }
+        }
+
+        Label {
+            id: labelHeader
+
+            text: qsTr("Список")
+            font.pixelSize: Qt.application.font.pixelSize * 2
+            //padding: 10
+        }
     }
 
     Label {
@@ -19,27 +59,8 @@ Page {
         anchors.centerIn: parent
     }
 
-    //    ListModel {
-    //        id: dataModel
-
-    //        ListElement {
-    //            date: "13.09.19"
-    //            product: "Хлеб"
-    //            isBought: true
-    //        }
-    //        ListElement {
-    //            date: "12.09.19"
-    //            product: "Молоко"
-    //            isBought: false
-    //        }
-    //        ListElement {
-    //            date: "11.09.19"
-    //            product: "Горошек"
-    //            isBought: false
-    //        }
-    //    }
     ListView {
-        id: view
+        id: viewRecords
         anchors.rightMargin: 10
         anchors.leftMargin: 10
         anchors.topMargin: 24
@@ -57,18 +78,15 @@ Page {
         }
         highlightFollowsCurrentItem: true
 
-        property int planId: 0
-
         delegate: Item {
             id: itemDelegate
 
-            width: view.width
+            width: viewRecords.width
             height: 60
 
             property var view: ListView.view
             property var isCurrent: ListView.isCurrentItem
             property int id: model.id
-
 
             Rectangle {
                 color: model.isBought ? "#E0FFE0" : "#F0F0F0"
@@ -82,7 +100,6 @@ Page {
 
                     //- buttonDeletePosition.width
                     renderType: Text.NativeRendering
-                    // @disable-check M222
                     text: model.name
                     font.pixelSize: 16
                 }
@@ -103,7 +120,7 @@ Page {
                 onClicked: {
                     //                    console.log("Щелчок по ", model.index, " итему")
                     //                    model.isBought = true
-                    view.currentIndex = model.index
+                    viewRecords.currentIndex = model.index
                     //                    model.position = "Edited"
                 }
 
@@ -118,7 +135,7 @@ Page {
         footer: Rectangle {
             id: addingBlock
 
-            width: view.width
+            width: viewRecords.width
             height: 60
             radius: height / 3
             //anchors.horizontalCenter: parent.horizontalCenter
@@ -142,10 +159,10 @@ Page {
 
                     text: "Название"
                     fontSizeMode: Text.VerticalFit
-                    anchors.top: parent.top
-                    anchors.topMargin: 5
-                    anchors.left: parent.left
-                    anchors.leftMargin: 5
+                    //                    anchors.top: parent.top
+                    //                    anchors.topMargin: 5
+                    //                    anchors.left: parent.left
+                    //                    anchors.leftMargin: 5
                 }
 
                 TextInput {
@@ -153,7 +170,7 @@ Page {
 
                     //                    anchors.top: labelName.bottom
                     //                    anchors.topMargin: 5
-                    anchors.verticalCenter: parent.verticalCenter
+                    //                    anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 15
                     text: qsTr("Название")
@@ -187,11 +204,11 @@ Page {
                     // @disable-check M223
                     onClicked: {
                         // @disable-check M222
-                        records.add(textInputAddingName.text.toString(), view.planId)
+                        records.add(textInputAddingName.text.toString(),
+                                    viewRecords.planId)
                     }
                 }
             }
         }
     }
-
 }

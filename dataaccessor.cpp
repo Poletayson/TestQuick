@@ -58,9 +58,11 @@ Plan DataAccessor::insertPlan(const QString name, const QString date)
 QList<Record> DataAccessor::getRecordsList(const int planId)
 {
     QList <Record> positions;
-    QSqlQuery query (QString ("SELECT *"
-                     "FROM positions"
-                     "WHERE plan_id = %1").arg(planId), dataBase);
+    QString queryStr = QString ("SELECT * "
+                                "FROM positions "
+                                "WHERE plan_id = %1").arg(QString::number(planId));
+    QSqlQuery query (queryStr, dataBase);
+    qDebug()<<"Ошибка: " << query.lastError().text();
     while (query.next()) {
         positions.append(Record(query.value(0).toInt(), query.value(3).toInt(), query.value(1).toString(), query.value(2).toBool()));//recordLists->add(query.value(1).toString(), query.value(2).toString(), query.value(0).toInt());
     }

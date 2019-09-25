@@ -6,40 +6,8 @@ Page {
     width: 600
     height: 400
 
-    ListModel {
-        id: dataModel
-
-        ListElement {
-            date: "13.09.19"
-            name: "Мария-Ра"
-            color: "red"
-        }
-        ListElement {
-            date: "12.09.19"
-            name: "Магнит"
-            color: "green"
-        }
-        ListElement {
-            date: "11.09.19"
-            name: "Лента"
-            color: "green"
-        }
-        ListElement {
-            date: "10.09.19"
-            name: "Ярче!"
-            color: "green"
-        }
-        ListElement {
-            date: "10.09.19"
-            name: "Ярче!"
-            color: "green"
-        }
-        ListElement {
-            date: "13.09.19"
-            name: "Мария-Ра"
-            color: "red"
-        }
-    }
+    property var currentId
+    signal planClicked(int id)
 
     header: Label {
         text: qsTr("Page 1")
@@ -47,13 +15,8 @@ Page {
         padding: 10
     }
 
-    //    Column {
-    //        id: columnList
-    //        //anchors.margins: 10
-    //        anchors.fill: parent
-    //        spacing: 30
     ListView {
-        id: view
+        id: viewPlans
         anchors.rightMargin: 10
         anchors.leftMargin: 10
         anchors.topMargin: 24
@@ -62,7 +25,7 @@ Page {
         anchors.margins: 10
         anchors.fill: parent
         spacing: 10
-        model: dataModel
+        model: plans
 
         clip: true
 
@@ -75,7 +38,7 @@ Page {
         section.delegate: Rectangle {
             //            anchors.topMargin: 35
             //            anchors.bottomMargin: 30
-            width: view.width
+            width: viewPlans.width
             height: 20
             color: "lightgray"
             Text {
@@ -87,17 +50,18 @@ Page {
         }
 
         delegate: Item {
-            id: itemDelegate
+            id: itemDelegatePlan
 
-            width: view.width
+            width: viewPlans.width
             height: 60
 
             property var view: ListView.view
             property var isCurrent: ListView.isCurrentItem
 
+            //property int planId: model.id
             Rectangle {
 
-                color: model.color
+                color: "#D5FFD5"
                 radius: height / 3
                 anchors.fill: parent
 
@@ -135,23 +99,31 @@ Page {
                     }
                 }
                 MouseArea {
-                    anchors.fill: parent
+                    id: areaPlanToRecords
 
-                    onClicked: view.currentIndex = model.index
+                    anchors.fill: parent
+                    // @disable-check M223
+                    onClicked: {
+                        viewPlans.currentIndex = model.index
+                        // @disable-check M222
+                        //swipeView.setCurrentIndex(1)
+                        // @disable-check M222
+                    }
 
                     // @disable-check M223
                     onDoubleClicked: {
-
+                        // @disable-check M222
+                        planClicked(model.index)
                     }
                 }
             }
         }
 
         footer: Rectangle {
-            id: button
+            id: addingPlanBlock
 
-            width: view.width
-            height: 40
+            width: viewPlans.width
+            height: 60
             radius: height / 3
             //anchors.horizontalCenter: parent.horizontalCenter
             border {
@@ -159,29 +131,71 @@ Page {
                 width: 1
             }
 
-            Text {
-                anchors.centerIn: parent
-                renderType: Text.NativeRendering
-                text: "Add"
+            Column {
+                id: columnInputPosition
+
+                height: parent.height
+                width: parent.width - 100
+
+                Text {
+                    id: labelName
+                    color: "#363636"
+
+                    renderType: Text.NativeRendering
+                    font.pixelSize: 12
+
+                    text: "Название"
+                    fontSizeMode: Text.VerticalFit
+                    ///anchors.top: parent.top
+                    //anchors.topMargin: 5
+                    //anchors.left: parent.left
+                    //anchors.leftMargin: 5
+                }
+
+                TextInput {
+                    id: textInputAddingName
+
+                    //                    anchors.top: labelName.bottom
+                    //                    anchors.topMargin: 5
+                    //anchors.verticalCenter: parent.verticalCenter
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    text: qsTr("Название")
+
+                    font.pixelSize: 14
+                }
             }
 
-            MouseArea {
-                anchors.fill: parent
-                // @disable-check M222
-                onClicked: dataModel.append({
+            Rectangle {
+                id: buttonAddPlan
 
-                                            })
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.left: columnInputPosition.right
+                anchors.right: parent.right
+                //width: parent.width
+                height: 30
+                //width: 100
+                radius: height / 3
+                //anchors.horizontalCenter: parent.horizontalCenter
+                border {
+                    color: "black"
+                    width: 1
+                }
+                Text {
+                    anchors.centerIn: parent
+                    renderType: Text.NativeRendering
+                    text: "Добавить"
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    // @disable-check M223
+                    onClicked: {
+                        // @disable-check M222
+                        plans.add(textInputAddingName.text.toString(),
+                                  Qt.formatDateTime(new Date(), "yy-MM-dd"))
+                    }
+                }
             }
         }
-    }
-
-    TextInput {
-        id: textInputMain
-        x: 152
-        y: -36
-        width: 206
-        height: 20
-        text: qsTr("Здесь некоторый текст страницы 1")
-        font.pixelSize: 12
     }
 }
