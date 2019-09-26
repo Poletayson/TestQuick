@@ -53,13 +53,19 @@ class DataAccessor
 {
 public:
     DataAccessor();
+
     QList <Plan> getPlansList ();
     Plan insertPlan (const QString name, const QString date);
+    bool deletePlan (int planId);
 
     QList <Record> getRecordsList (const int planId);
     Record insertRecord (const QString name, const bool isBought, const int planId);
+    bool deleteRecord (int recordId);
+    bool setRecordIsBought (bool isBought, int recordId);
 private:
     QSqlDatabase dataBase;
+
+    //bool deleteRecords (int planId);
 };
 
 #endif // DATAACCESSOR_H

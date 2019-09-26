@@ -6,7 +6,7 @@ RecordsList::RecordsList(DataAccessor *daA, QObject *parent) : QAbstractListMode
     roles[PlanRole] = "plan";
     roles[NameRole] = "name";
     roles[IdRole] = "id";
-    roles[IsBougtRole] = "isBougt";
+    roles[IsBougtRole] = "isBought";
 
     da = daA;
 //    names.append("Test");
@@ -67,7 +67,10 @@ bool RecordsList::setData(const QModelIndex &index, const QVariant &value, int r
         records[index.row()].setName(value.toString());
         break;
     case IsBougtRole:
-        records[index.row()].setIsBought(value.toBool());
+        if (da->setRecordIsBought(value.toBool(), records[index.row()].getId()))
+            records[index.row()].setIsBought(value.toBool());
+        else
+            return false;
         break;
     default:
         return false;
@@ -78,17 +81,7 @@ bool RecordsList::setData(const QModelIndex &index, const QVariant &value, int r
     return true;
 }
 
-bool RecordsList::removeRow(int row, const QModelIndex &parent)
-{
-    if (row < records.count()){
-        beginRemoveRows(QModelIndex(), row, row);
-        records.removeAt(row);
-        endRemoveRows();
-        return true;
-    }
 
-    return false;
-}
 
 void RecordsList::fillRecords(int planId)
 {
@@ -121,6 +114,21 @@ void RecordsList::add(const QString name, int planId)
         QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
         emit dataChanged(index, createIndex(records.size()-1, 0, static_cast<void *>(0)));
     }
+}
+
+bool RecordsList::removeRows(int row, int count, const QModelIndex &parent)
+{
+    Q_UNUSED (parent)
+    if (row + count <= records.count()) {
+        beginRemoveRows(QModelIndex(), row, row + count - 1);
+        for (int i = row; i < row + count; ++i)
+            if (da->deleteRecord(records[i].getId()))
+                records.removeAt(i);
+        endRemoveRows();
+        return true;
+    }
+
+    return false;
 }
 
 PlansList::PlansList(DataAccessor *daA, QObject *parent) : QAbstractListModel(parent)
@@ -210,7 +218,17 @@ void PlansList::add(const QString name, const QString date)
 
 bool PlansList::removeRow(int row, const QModelIndex &parent)
 {
+    Q_UNUSED (parent)
+    if (row < plans.count()){
+        if (da->deletePlan(plans[row].getId())) {
+            beginRemoveRows(QModelIndex(), row, row);
+            plans.removeAt(row);
+            endRemoveRows();
+            return true;
+        }
+    }
 
+    return false;
 }
 
 void PlansList::fillPlans()

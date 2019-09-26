@@ -8,10 +8,11 @@ Page {
     height: 400
 
     property var planId
+    property var headerText: ""
 
     signal back
 
-    header: Row {
+    header: Rectangle {
 
         anchors.left: parent.left
         anchors.top: parent.top
@@ -22,22 +23,23 @@ Page {
 
         height: labelHeader.font.pixelSize
 
+        //Button to back
         Rectangle {
             id: buttonBackToPlans
 
             height: 40
             width: 40
-            //radius: height / 3
-            //anchors.horizontalCenter: parent.horizontalCenter
+            Image {
+                anchors.fill: parent
+                anchors.margins: buttonBackToPlans.height/10
+                source: "/Images/back.png"
+            }
+
             border {
                 color: "black"
                 width: 1
             }
-            Text {
-                anchors.centerIn: parent
-                renderType: Text.NativeRendering
-                text: "Назад"
-            }
+
             MouseArea {
                 anchors.fill: parent
                 // @disable-check M222
@@ -48,15 +50,12 @@ Page {
         Label {
             id: labelHeader
 
-            text: qsTr("Список")
+            anchors.left: buttonBackToPlans.right
+            anchors.leftMargin: 10
+            text: headerText
             font.pixelSize: Qt.application.font.pixelSize * 2
             //padding: 10
         }
-    }
-
-    Label {
-        text: qsTr("You are on Page 2.")
-        anchors.centerIn: parent
     }
 
     ListView {
@@ -69,7 +68,7 @@ Page {
         anchors.margins: 10
         anchors.fill: parent
         spacing: 10
-        model: records //dataModel
+        model: records
 
         clip: true
 
@@ -86,7 +85,6 @@ Page {
 
             property var view: ListView.view
             property var isCurrent: ListView.isCurrentItem
-            property int id: model.id
 
             Rectangle {
                 color: model.isBought ? "#E0FFE0" : "#F0F0F0"
@@ -98,10 +96,17 @@ Page {
                     anchors.left: parent.left
                     anchors.leftMargin: 5
 
-                    //- buttonDeletePosition.width
                     renderType: Text.NativeRendering
                     text: model.name
                     font.pixelSize: 16
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    onClicked: viewRecords.currentIndex = model.index
+
+                    onDoubleClicked: model.isBought = model.isBought ?  false : true
                 }
 
                 RoundButton {
@@ -111,25 +116,11 @@ Page {
                     anchors.rightMargin: 8
                     anchors.verticalCenter: parent.verticalCenter
                     icon.source: "/Images/backet.png"
+
+                    // @disable-check M222
+                    onClicked: records.removeRows (model.index, 1) //model.name = "del"
                 }
             }
-            MouseArea {
-                anchors.fill: parent
-
-                // @disable-check M223
-                onClicked: {
-                    //                    console.log("Щелчок по ", model.index, " итему")
-                    //                    model.isBought = true
-                    viewRecords.currentIndex = model.index
-                    //                    model.position = "Edited"
-                }
-
-                // @disable-check M223
-                onDoubleClicked: {
-                    model.isBought = !model.isBought
-                }
-            }
-            //}
         }
 
         footer: Rectangle {
@@ -205,7 +196,7 @@ Page {
                     onClicked: {
                         // @disable-check M222
                         records.add(textInputAddingName.text.toString(),
-                                    viewRecords.planId)
+                                    planId)
                     }
                 }
             }

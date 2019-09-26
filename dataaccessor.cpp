@@ -9,25 +9,28 @@ DataAccessor::DataAccessor()
 //    sdb.setDatabaseName(qApp->applicationDirPath()
 //                        + QDir::separator()
 //                        + "lang.sqlite" );
+    QSqlQuery query;
+    if (!query.exec("PRAGMA foreign_keys=on"))
+        qDebug()<<"Ошибка включения внешних ключей: " << query.lastError().text();
 
     if (!isDbExists) {
-        QSqlQuery query;
+
         QString strQuery = "CREATE TABLE plans ("
                 "id_plan INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
                 "plan_name TEXT, "
                 "date TEXT"
                 ");";
-       query.exec(strQuery);
-       qDebug()<<"Ошибка созд: " << query.lastError().text();
+       if (!query.exec(strQuery))
+           qDebug()<<"Ошибка созд: " << query.lastError().text();
        strQuery = "CREATE TABLE positions ("
                        "id_position INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL, "
                        "position_name TEXT, "
                        "is_bought INTEGER, "
                        "plan_id INTEGER NOT NULL, "
-                       "FOREIGN KEY (plan_id) REFERENCES plans(id_plan)"
+                       "FOREIGN KEY (plan_id) REFERENCES plans(id_plan) ON DELETE CASCADE"
                        ");";
-       query.exec(strQuery);
-       qDebug()<<"Ошибка созд: " << query.lastError().text();
+       if (!query.exec(strQuery))
+           qDebug()<<"Ошибка созд: " << query.lastError().text();
     }
 }
 
@@ -46,7 +49,7 @@ Plan DataAccessor::insertPlan(const QString name, const QString date)
 {
     QSqlQuery query;
     query.prepare("INSERT INTO plans (plan_name, date)"
-                                  "VALUES (:name, :date);");
+                                  "VALUES (:name, :date)");
     query.bindValue(":name", name);
     query.bindValue(":date", date);
     if (query.exec())
@@ -55,14 +58,32 @@ Plan DataAccessor::insertPlan(const QString name, const QString date)
         return Plan (-1, "", "");
 }
 
+bool DataAccessor::deletePlan(int planId)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM plans "
+                  "WHERE id_plan = :plan_id");
+    query.bindValue(":plan_id", planId);
+
+    if (query.exec())
+        return true;
+    else {
+        qDebug()<<"План не удален! Ошибка: " << query.lastError().text();
+        return false;
+    }
+}
+
 QList<Record> DataAccessor::getRecordsList(const int planId)
 {
     QList <Record> positions;
-    QString queryStr = QString ("SELECT * "
-                                "FROM positions "
-                                "WHERE plan_id = %1").arg(QString::number(planId));
-    QSqlQuery query (queryStr, dataBase);
-    qDebug()<<"Ошибка: " << query.lastError().text();
+
+    QSqlQuery query;
+    query.prepare("SELECT * "
+                  "FROM positions "
+                  "WHERE plan_id = :plid");
+    query.bindValue(":plid", planId);
+    if (!query.exec())
+        qDebug()<<"Ошибка получения списка записей: " << query.lastError().text();
     while (query.next()) {
         positions.append(Record(query.value(0).toInt(), query.value(3).toInt(), query.value(1).toString(), query.value(2).toBool()));//recordLists->add(query.value(1).toString(), query.value(2).toString(), query.value(0).toInt());
     }
@@ -73,7 +94,7 @@ Record DataAccessor::insertRecord(const QString name, const bool isBought, const
 {
     QSqlQuery query;
     query.prepare("INSERT INTO positions (position_name, is_bought, plan_id)"
-                                  "VALUES (:position_name, :is_bought, :plan_id);");
+                                  "VALUES (:position_name, :is_bought, :plan_id)");
     query.bindValue(":position_name", name);
     query.bindValue(":is_bought", isBought);
     query.bindValue(":plan_id", planId);
@@ -85,6 +106,39 @@ Record DataAccessor::insertRecord(const QString name, const bool isBought, const
         return Record (-1, -1, "", false);
     }
 }
+
+bool DataAccessor::deleteRecord(int recordId)
+{
+    QSqlQuery query;
+    query.prepare("DELETE FROM positions "
+                  "WHERE id_position = :pos_id");
+    query.bindValue(":pos_id", recordId);
+
+    if (query.exec())
+        return true;
+    else {
+        qDebug()<<"Запись не удалена! Ошибка: " << query.lastError().text();
+        return false;
+    }
+}
+
+bool DataAccessor::setRecordIsBought(bool isBought, int recordId)
+{
+    QSqlQuery query;
+    query.prepare("UPDATE positions "
+                  "SET is_bought = :bought_param "
+                  "WHERE id_position = :pos_id");
+    query.bindValue(":bought_param", isBought ? 1 : 0);
+    query.bindValue(":pos_id", recordId);
+
+    if (query.exec())
+        return true;
+    else {
+        qDebug()<<"Ошибка обновления: " << query.lastError().text();
+        return false;
+    }
+}
+
 
 Plan::Plan(int idA, QString nameA, QString dateA)
 {

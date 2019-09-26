@@ -23,8 +23,9 @@ ApplicationWindow {
             id: page1
 
             onPlanClicked: {
-                page2.planId = id
-                records.fillRecords(id)
+                page2.planId = plan.id
+                page2.headerText = plan.planName
+                records.fillRecords(plan.id)
                 swipeView.currentIndex = 1
             }
 

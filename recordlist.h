@@ -31,13 +31,14 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
+//virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
 signals:
 
 public slots:
     void add(const QString name, int planId);
-    virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
+    bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     void fillRecords (int planId);
 
 private:
@@ -66,6 +67,8 @@ public:
     virtual QVariant data(const QModelIndex &index, int role) const;
     virtual QHash<int, QByteArray> roleNames() const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
+
+
 
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 

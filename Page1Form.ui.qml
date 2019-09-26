@@ -7,10 +7,10 @@ Page {
     height: 400
 
     property var currentId
-    signal planClicked(int id)
+    signal planClicked(var plan)
 
     header: Label {
-        text: qsTr("Page 1")
+        text: qsTr("Списки покупок")
         font.pixelSize: Qt.application.font.pixelSize * 2
         padding: 10
     }
@@ -65,23 +65,29 @@ Page {
                 radius: height / 3
                 anchors.fill: parent
 
-                GridLayout {
-                    id: row
+                //                GridLayout {
+                //                    id: row
 
-                    rows: 3
-                    flow: GridLayout.TopToBottom
-                    anchors.fill: parent
+                //                    rows: 3
+                //                    flow: GridLayout.TopToBottom
+                //                    anchors.fill: parent
+
+                //                    Text {
+
+                //                        //Layout.alignment: instead
+                //                        renderType: Text.NativeRendering
+                //                        text: model.date
+                //                        font.pixelSize: 14
+                //                    }
+//                Rectangle {
+//                    anchors.left: parent.left
+//                    anchors.top: parent.top
+//                    anchors.bottom: parent.bottom
+//                    anchors.right: buttonPlanDel.left
+//                    anchors.rightMargin: 10
 
                     Text {
-
-                        //Layout.alignment: instead
-                        renderType: Text.NativeRendering
-                        text: model.date
-                        font.pixelSize: 14
-                    }
-
-                    Text {
-                        Layout.rowSpan: 3
+                        //                        Layout.rowSpan: 3
                         Layout.leftMargin: 20
 
                         renderType: Text.NativeRendering
@@ -91,30 +97,34 @@ Page {
                         font.pixelSize: 18
                     }
 
-                    RoundButton {
+                    MouseArea {
+                        id: areaPlanToRecords
 
-                        Layout.rowSpan: 3
-                        Layout.rightMargin: 8
-                        icon.source: "/Images/backet.png"
-                    }
-                }
-                MouseArea {
-                    id: areaPlanToRecords
+                        anchors.fill: parent
 
-                    anchors.fill: parent
-                    // @disable-check M223
-                    onClicked: {
-                        viewPlans.currentIndex = model.index
-                        // @disable-check M222
-                        //swipeView.setCurrentIndex(1)
-                        // @disable-check M222
+                        onClicked: viewPlans.currentIndex = model.index
+
+                        // @disable-check M223
+                        onDoubleClicked: {
+                            // @disable-check M222
+                            planClicked({
+                                            "id": model.id,
+                                            "planName": model.name
+                                        })
+                        }
                     }
 
-                    // @disable-check M223
-                    onDoubleClicked: {
-                        // @disable-check M222
-                        planClicked(model.index)
-                    }
+
+                //                }
+                RoundButton {
+                    id: buttonPlanDel
+
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    icon.source: "/Images/backet.png"
+
+                    // @disable-check M222
+                    onClicked: plans.removeRow(model.index)
                 }
             }
         }
