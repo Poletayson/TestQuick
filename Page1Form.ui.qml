@@ -38,6 +38,8 @@ Page {
         section.delegate: Rectangle {
             //            anchors.topMargin: 35
             //            anchors.bottomMargin: 30
+
+
             width: viewPlans.width
             height: 20
             color: "lightgray"
@@ -65,30 +67,11 @@ Page {
                 radius: height / 3
                 anchors.fill: parent
 
-                //                GridLayout {
-                //                    id: row
-
-                //                    rows: 3
-                //                    flow: GridLayout.TopToBottom
-                //                    anchors.fill: parent
-
-                //                    Text {
-
-                //                        //Layout.alignment: instead
-                //                        renderType: Text.NativeRendering
-                //                        text: model.date
-                //                        font.pixelSize: 14
-                //                    }
-//                Rectangle {
-//                    anchors.left: parent.left
-//                    anchors.top: parent.top
-//                    anchors.bottom: parent.bottom
-//                    anchors.right: buttonPlanDel.left
-//                    anchors.rightMargin: 10
 
                     Text {
-                        //                        Layout.rowSpan: 3
-                        Layout.leftMargin: 20
+                        anchors.verticalCenter: parent.verticalCenter
+                        anchors.left: parent.left
+                        anchors.leftMargin: 5
 
                         renderType: Text.NativeRendering
                         // @disable-check M222
@@ -120,8 +103,21 @@ Page {
                     id: buttonPlanDel
 
                     anchors.right: parent.right
+                    anchors.rightMargin: 5
                     anchors.verticalCenter: parent.verticalCenter
                     icon.source: "/Images/backet.png"
+
+                    background: Rectangle {
+
+                        width: buttonPlanDel.width
+                        height: buttonPlanDel.height
+
+                        color: "white"
+                        border.color: "#696969"
+                        border.width: 1
+                        radius: width/2
+                    }
+
 
                     // @disable-check M222
                     onClicked: plans.removeRow(model.index)
@@ -141,14 +137,18 @@ Page {
                 width: 1
             }
 
-            Column {
-                id: columnInputPosition
+//            Column {
+//                id: columnInputPosition
 
-                height: parent.height
-                width: parent.width - 100
+//                height: parent.height
+//                width: parent.width - 100
 
                 Text {
                     id: labelName
+
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+
                     color: "#363636"
 
                     renderType: Text.NativeRendering
@@ -170,42 +170,40 @@ Page {
                     //anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 15
+                    anchors.right: buttonPlanAdd.left
+                    anchors.rightMargin: 15
+                    anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("Название")
 
                     font.pixelSize: 14
                 }
-            }
+            //}
 
-            Rectangle {
-                id: buttonAddPlan
 
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: columnInputPosition.right
+            RoundButton {
+                id: buttonPlanAdd
+
                 anchors.right: parent.right
-                //width: parent.width
-                height: 30
-                //width: 100
-                radius: height / 3
-                //anchors.horizontalCenter: parent.horizontalCenter
-                border {
-                    color: "black"
-                    width: 1
+                anchors.rightMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
+                icon.source: "/Images/plus.png"
+                background: Rectangle {
+
+                    width: buttonPlanAdd.width
+                    height: buttonPlanAdd.height
+
+                    color: "white"
+                    border.color: "#696969"
+                    border.width: 1
+                    radius: width/2
                 }
-                Text {
-                    anchors.centerIn: parent
-                    renderType: Text.NativeRendering
-                    text: "Добавить"
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    // @disable-check M223
-                    onClicked: {
-                        // @disable-check M222
-                        plans.add(textInputAddingName.text.toString(),
-                                  Qt.formatDateTime(new Date(), "yy-MM-dd"))
-                    }
-                }
+
+                // @disable-check M222
+                onClicked: plans.add(textInputAddingName.text.toString(),
+                                        Qt.formatDateTime(new Date(), "yy-MM-dd"))
             }
+
+
         }
     }
 }

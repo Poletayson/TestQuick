@@ -110,12 +110,23 @@ Page {
                 }
 
                 RoundButton {
-                    id: buttonDeletePosition
+                    id: buttonPositionDel
 
                     anchors.right: parent.right
-                    anchors.rightMargin: 8
+                    anchors.rightMargin: 5
                     anchors.verticalCenter: parent.verticalCenter
+
                     icon.source: "/Images/backet.png"
+                    background: Rectangle {
+
+                        width: buttonPositionDel.width
+                        height: buttonPositionDel.height
+
+                        color: "white"
+                        border.color: "#696969"
+                        border.width: 1
+                        radius: width/2
+                    }
 
                     // @disable-check M222
                     onClicked: records.removeRows (model.index, 1) //model.name = "del"
@@ -143,6 +154,10 @@ Page {
 
                 Text {
                     id: labelName
+
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+
                     color: "#363636"
 
                     renderType: Text.NativeRendering
@@ -170,36 +185,59 @@ Page {
                 }
             }
 
-            Rectangle {
-                id: buttonAddRecord
+            RoundButton {
+                id: buttonRecodAdd
 
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.left: columnInputPosition.right
                 anchors.right: parent.right
-                //width: parent.width
-                height: 30
-                //width: 100
-                radius: height / 3
-                //anchors.horizontalCenter: parent.horizontalCenter
-                border {
-                    color: "black"
-                    width: 1
+                anchors.rightMargin: 5
+                anchors.verticalCenter: parent.verticalCenter
+                icon.source: "/Images/plus.png"
+                background: Rectangle {
+
+                    width: buttonRecodAdd.width
+                    height: buttonRecodAdd.height
+
+                    color: "white"
+                    border.color: "#696969"
+                    border.width: 1
+                    radius: width/2
                 }
-                Text {
-                    anchors.centerIn: parent
-                    renderType: Text.NativeRendering
-                    text: "Добавить"
-                }
-                MouseArea {
-                    anchors.fill: parent
-                    // @disable-check M223
-                    onClicked: {
-                        // @disable-check M222
-                        records.add(textInputAddingName.text.toString(),
-                                    planId)
-                    }
-                }
+
+                // @disable-check M222
+                onClicked: records.add(textInputAddingName.text.toString(),
+                                planId)
             }
+
+//            Rectangle {
+//                id: buttonAddRecord
+
+//                anchors.verticalCenter: parent.verticalCenter
+//                anchors.left: columnInputPosition.right
+//                anchors.right: parent.right
+//                //width: parent.width
+//                height: 30
+//                //width: 100
+//                radius: height / 3
+//                //anchors.horizontalCenter: parent.horizontalCenter
+//                border {
+//                    color: "black"
+//                    width: 1
+//                }
+//                Text {
+//                    anchors.centerIn: parent
+//                    renderType: Text.NativeRendering
+//                    text: "Добавить"
+//                }
+//                MouseArea {
+//                    anchors.fill: parent
+//                    // @disable-check M223
+//                    onClicked: {
+//                        // @disable-check M222
+//                        records.add(textInputAddingName.text.toString(),
+//                                    planId)
+//                    }
+//                }
+//            }
         }
     }
 }
