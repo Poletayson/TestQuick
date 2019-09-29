@@ -1,168 +1,161 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.3
+//import QtQuick.Layouts 1.3
 import "Constants.js" as Constants
 
 Page {
     id: page
+
     width: 600
     height: 400
 
-    property var planId
-    property var headerText: ""
+    property var currentId
 
-    signal back
+    signal planClicked(var plan)
 
-    header: Rectangle {
+    header: Label {
         id: header
 
-        anchors.left: parent.left
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.leftMargin: 10
-        anchors.rightMargin: 10
-        anchors.topMargin: 10
-
-        height: 60
-
-        //Button to back
-        Rectangle {
-            id: buttonBackToPlans
-
-            height: header.height - Constants.SPACING * 2
-            width: height
-
-            anchors.verticalCenter: parent.verticalCenter
-
-            Image {
-                anchors.fill: parent
-                anchors.margins: buttonBackToPlans.height / 10
-                source: "/Images/back.png"
-            }
-
-            border {
-                color: "black"
-                width: 1
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                // @disable-check M222
-                onClicked: back()
-            }
-        }
-
-        Label {
-            id: labelHeader
-
-            anchors.left: buttonBackToPlans.right
-            anchors.leftMargin: 10
-
-            anchors.verticalCenter: parent.verticalCenter
-
-            text: headerText
-            font.pixelSize: Math.max(Math.min(header.width / 15,
-                                              Constants.MAX_HEADER_FONT_SIZE),
-                                     Constants.MIN_HEADER_FONT_SIZE)
-        }
+        text: qsTr("Списки покупок")
+        font.pixelSize: Math.max(
+                            Math.min(width / 10,
+                                     Constants.MAX_HEADER_FONT_SIZE),
+                            Constants.MIN_HEADER_FONT_SIZE) //Qt.application.font.pixelSize * 2
+        padding: 10
     }
 
     ListView {
-        id: viewRecords
-
+        id: viewPlans
         anchors.rightMargin: 10
         anchors.leftMargin: 10
-        anchors.topMargin: Constants.SPACING
+        anchors.topMargin: 0
         anchors.bottomMargin: 10
 
         anchors.fill: parent
-
         spacing: Constants.SPACING
 
-        model: records
+        model: plans
 
         clip: true
+
+        property int blockHeight: Math.max(Math.min(height / 5.5, 60), 40)
 
         highlight: Rectangle {
             color: "skyblue"
         }
         highlightFollowsCurrentItem: true
 
-        property int blockHeight: Math.max(Math.min(height / 5.5, 60), 40)
+        section.property: "date"
+        section.delegate: Rectangle {
+            width: viewPlans.width
+            height: Constants.SPACING * 2 + 20
+
+            Rectangle {
+                anchors.fill: parent
+                anchors.topMargin: Constants.SPACING
+                anchors.bottomMargin: Constants.SPACING
+
+                border.color: Constants.BORDER_COLOR
+                border.width: 1
+
+                color: "lightgray"
+                Text {
+                    anchors.centerIn: parent
+                    renderType: Text.NativeRendering
+                    font.bold: true
+                    text: section
+                }
+            }
+        }
 
         delegate: Item {
-            id: itemDelegate
+            id: itemDelegatePlan
 
-            width: viewRecords.width
-            height: viewRecords.blockHeight
+            width: viewPlans.width
+            height: viewPlans.blockHeight
 
+            property var view: ListView.view
             property var isCurrent: ListView.isCurrentItem
 
             Rectangle {
-                color: model.isBought ? "#E0FFE0" : "#F0F0F0"
+
+                color: "#D5FFD5"
                 radius: height / 3
                 anchors.fill: parent
 
                 Text {
-                    id: textRecordName
+                    id: textPlanName
 
                     anchors.verticalCenter: parent.verticalCenter
                     anchors.left: parent.left
                     anchors.leftMargin: 5
+                    anchors.right: buttonPlanDel.left
+                    anchors.rightMargin: 5
+
+                    clip: true
 
                     renderType: Text.NativeRendering
-                    text: model.name
+
+                    text: model.name //"%1%2".arg().arg(isCurrent ? "*" : "")
                     font.pixelSize: Math.max(Math.min(
-                                                 textRecordName.width / 15,
+                                                 textPlanName.width / 15,
                                                  Constants.MAX_ITEM_FONT_SIZE),
                                              Constants.MIN_ITEM_FONT_SIZE)
                 }
 
                 MouseArea {
+                    id: areaPlanToRecords
+
                     anchors.fill: parent
 
-                    onClicked: viewRecords.currentIndex = model.index
+                    onClicked: viewPlans.currentIndex = model.index
 
-                    onDoubleClicked: model.isBought = model.isBought ? false : true
+                    // @disable-check M223
+                    onDoubleClicked: {
+                        // @disable-check M222
+                        planClicked({
+                                        "id": model.id,
+                                        "planName": model.name
+                                    })
+                    }
                 }
 
                 RoundButton {
-                    id: buttonPositionDel
+                    id: buttonPlanDel
 
                     anchors.right: parent.right
                     anchors.rightMargin: 5
                     anchors.verticalCenter: parent.verticalCenter
-
                     icon.source: "/Images/backet.png"
+
                     background: Rectangle {
 
-                        width: buttonPositionDel.width
-                        height: buttonPositionDel.height
+                        width: buttonPlanDel.width
+                        height: buttonPlanDel.height
 
                         color: "white"
-                        border.color: "#696969"
+                        border.color: Constants.BORDER_COLOR
                         border.width: 1
                         radius: width / 2
                     }
 
                     // @disable-check M222
-                    onClicked: records.removeRows(model.index,
-                                                  1) //model.name = "del"
+                    onClicked: plans.removeRow(model.index)
                 }
             }
         }
 
         footer: Rectangle {
-            height: Constants.SPACING * 2 + viewRecords.blockHeight
-            width: viewRecords.width
+            height: Constants.SPACING * 2 + viewPlans.blockHeight
+            width: viewPlans.width
 
             Rectangle {
-                id: addingRecordBlock
+                id: addingPlanBlock
 
                 anchors.top: parent.top
                 anchors.topMargin: Constants.SPACING * 2
 
-                height: viewRecords.blockHeight
+                height: viewPlans.blockHeight
                 width: parent.width
 
                 radius: height / 3
@@ -177,14 +170,14 @@ Page {
 
                     anchors.left: parent.left
                     anchors.leftMargin: 15
-                    anchors.right: buttonRecordAdd.left
+                    anchors.right: buttonPlanAdd.left
                     anchors.rightMargin: 15
                     anchors.verticalCenter: parent.verticalCenter
                     height: parent.height / 1.5
 
                     clip: true
 
-                    placeholderText: "Название товара"
+                    placeholderText: "Название списка"
 
                     maximumLength: 30
 
@@ -200,7 +193,7 @@ Page {
                 }
 
                 RoundButton {
-                    id: buttonRecordAdd
+                    id: buttonPlanAdd
 
                     anchors.right: parent.right
                     anchors.rightMargin: 5
@@ -211,8 +204,8 @@ Page {
 
                     background: Rectangle {
 
-                        width: buttonRecordAdd.width
-                        height: buttonRecordAdd.height
+                        width: buttonPlanAdd.width
+                        height: buttonPlanAdd.height
 
                         color: "white"
                         border.color: Constants.BORDER_COLOR
@@ -223,7 +216,8 @@ Page {
                     // @disable-check M223
                     onClicked: {
                         // @disable-check M222
-                        records.add(textInputAddingName.text.toString(), planId)
+                        plans.add(textInputAddingName.text.toString(),
+                                  Qt.formatDateTime(new Date(), "yyyy-MM-dd"))
                         textInputAddingName.text = ""
                     }
                 }

@@ -1,8 +1,13 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>Page1Form.ui.qml</file>
+        <file>PagePlansForm.ui.qml</file>
         <file>Page2Form.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
+        <file>Constants.qml</file>
+        <file>Constants.js</file>
+        <file>PageStart.qml</file>
+        <file>PageStartForm.ui.qml</file>
+        <file>PagePlans.qml</file>
     </qresource>
 </RCC>

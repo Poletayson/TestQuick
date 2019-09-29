@@ -1,4 +1,4 @@
-QT += quick virtualkeyboard sql
+QT += quick sql #virtualkeyboard
 
 
 #QMAKE_LFLAGS += -nostdlib
