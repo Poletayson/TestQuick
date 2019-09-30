@@ -2,12 +2,22 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>PagePlansForm.ui.qml</file>
-        <file>Page2Form.ui.qml</file>
+        <file>PageRecordsForm.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
         <file>Constants.qml</file>
         <file>Constants.js</file>
         <file>PageStart.qml</file>
         <file>PageStartForm.ui.qml</file>
         <file>PagePlans.qml</file>
+        <file>PageRecords.qml</file>
+        <file>Delegates/FooterRecords.qml</file>
+        <file>Delegates/FooterRecordsForm.ui.qml</file>
+        <file>Delegates/ItemDelegatePlan.qml</file>
+        <file>Delegates/ItemDelegatePlanForm.ui.qml</file>
+        <file>Delegates/ItemDelegateRecord.qml</file>
+        <file>Delegates/ItemDelegateRecordForm.ui.qml</file>
+        <file>Delegates/FooterPlansForm.ui.qml</file>
+        <file>Delegates/FooterPlans.qml</file>
     </qresource>
+    <qresource lang="QML" prefix="/Delegates"/>
 </RCC>

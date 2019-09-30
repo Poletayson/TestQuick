@@ -98,7 +98,7 @@ Record DataAccessor::insertRecord(const QString name, const bool isBought, const
     query.bindValue(":position_name", name);
     query.bindValue(":is_bought", isBought);
     query.bindValue(":plan_id", planId);
-    qDebug()<<"Параметры: " << query.boundValues().value(":position_name").toString() << " " << query.boundValues().value(":is_bought").toString() << " " <<query.boundValues().value(":plan_id").toString();
+    //qDebug()<<"Параметры: " << query.boundValues().value(":position_name").toString() << " " << query.boundValues().value(":is_bought").toString() << " " <<query.boundValues().value(":plan_id").toString();
     if (query.exec())
         return Record (query.lastInsertId().toInt(), planId, name, isBought);
     else {

@@ -25,18 +25,18 @@ ApplicationWindow {
         }
 
         PagePlans {
-            id: page1
+            id: pagePlans
 
             onPlanClicked: {
-                page2.planId = plan.id
-                page2.headerText = plan.planName
+                pageRecords.planId = plan.id
+                pageRecords.headerText = plan.planName
                 records.fillRecords(plan.id)
                 swipeView.currentIndex = 2
             }
         }
 
-        Page2Form {
-            id: page2
+        PageRecords {
+            id: pageRecords
 
             onBack: swipeView.currentIndex = 1
         }
