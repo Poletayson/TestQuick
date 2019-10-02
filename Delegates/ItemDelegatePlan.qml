@@ -1,6 +1,14 @@
 import QtQuick 2.0
 
 ItemDelegatePlanForm {
+    function setCount (){
+        textCounter.text = plans.getRecordsCount(model.id, true)+ "/" + (plans.getRecordsCount(model.id, true) + plans.getRecordsCount(model.id, false))
+    }
+
+//    itemDelegatePlan.onDataChanged: {
+//        setCount()
+//    }
+
     buttonPlanDel.onClicked: {
         plans.removeRow(model.index)
     }
@@ -11,10 +19,17 @@ ItemDelegatePlanForm {
 
     areaPlanToRecords.onDoubleClicked: {
         planClicked({
-                                        "id": model.id,
-                                        "planName": model.name
-                                    })
+                        "index": model.index,
+                        "id": model.id,
+                        "planName": model.name
+                    })
     }
+
+    textCounter.text: plans.getRecordsCount(model.id, true)+ "/" + (plans.getRecordsCount(model.id, true) + plans.getRecordsCount(model.id, false))
+
+
+
+
 }
 
 /*##^##

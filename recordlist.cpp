@@ -238,4 +238,9 @@ void PlansList::fillPlans()
     endInsertRows();
 }
 
+int PlansList::getRecordsCount(int row, bool isBoughtProperty)
+{
+    return da->getRecordsCount(row, isBoughtProperty);
+}
+
 

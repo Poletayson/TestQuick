@@ -22,7 +22,7 @@ Page {
         x: 100
         width: 200
         height: 46
-        text: qsTr("Список покупок")
+        text: qsTr("Списки покупок")
         anchors.topMargin: parent.height / 4
         anchors.top: parent.top
         transformOrigin: Item.Center

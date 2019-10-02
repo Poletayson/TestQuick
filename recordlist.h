@@ -11,8 +11,6 @@
 #include <QByteArray>
 #include <dataaccessor.h>
 
-
-
 class RecordsList: public QAbstractListModel
 {
     Q_OBJECT
@@ -31,7 +29,6 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-//virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
 signals:
@@ -42,9 +39,6 @@ public slots:
     void fillRecords (int planId);
 
 private:
-//    QStringList names;
-//    QList <int> lists;
-//    QList <bool> isBoughtMarks;
     QList <Record> records;
     DataAccessor *da;
     QHash<int, QByteArray> roles;
@@ -79,14 +73,12 @@ public slots:
     virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
     void fillPlans ();
 
+    int getRecordsCount (int row, bool isBoughtProperty);
+
 private:
     QList <Plan> plans;
     DataAccessor *da;
     QHash<int, QByteArray> roles;
-
-//    QList <int> ids;
-//    QStringList names;
-//    QStringList dates;
 };
 
 #endif // RECORD_H

@@ -8,7 +8,7 @@ ApplicationWindow {
     visible: true
     width: 640
     height: 480
-    title: qsTr("Tabs")
+    title: qsTr("Списки покупок")
 
 
     SwipeView {
@@ -29,6 +29,7 @@ ApplicationWindow {
 
             onPlanClicked: {
                 pageRecords.planId = plan.id
+                pageRecords.planIndex = plan.index
                 pageRecords.headerText = plan.planName
                 records.fillRecords(plan.id)
                 swipeView.currentIndex = 2
@@ -38,7 +39,14 @@ ApplicationWindow {
         PageRecords {
             id: pageRecords
 
-            onBack: swipeView.currentIndex = 1
+            onBack: {
+                //pagePlans.viewPlans.itemAtIndex(plan).setCount ()
+                //var i = plan
+                plans.
+                swipeView.currentIndex = 1
+            }
+
+
         }
 
     }
@@ -46,6 +54,7 @@ ApplicationWindow {
     Component.onCompleted: {
         plans.fillPlans();
     }
+
 }
 
 

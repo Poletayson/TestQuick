@@ -8,12 +8,14 @@ Page {
     id: page
     width: 600
     height: 400
+    property alias viewRecords: viewRecords
     property alias mouseArea: mouseArea
 
     property var planId
+    property var planIndex
     property var headerText: ""
 
-    signal back
+    signal back(int plan)
 
     header: Rectangle {
         id: header
@@ -21,7 +23,6 @@ Page {
         anchors.left: parent.left
         anchors.top: parent.top
         anchors.margins: 10
-
 
         height: 60
 

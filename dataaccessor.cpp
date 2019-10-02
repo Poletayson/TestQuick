@@ -73,6 +73,22 @@ bool DataAccessor::deletePlan(int planId)
     }
 }
 
+int DataAccessor::getRecordsCount(int planId, bool isBoughtProperty)
+{
+    QSqlQuery query;
+    query.prepare("SELECT count (plan_id)"
+                  "FROM positions "
+                  "WHERE plan_id = :plid AND is_bought = :isBProperty");
+    query.bindValue(":plid", planId);
+    query.bindValue(":isBProperty", isBoughtProperty ? 1 : 0);
+    if (!query.exec())
+        qDebug()<<"Ошибка получения списка записей при подсчете: " << query.lastError().text();
+    query.next();
+    int count = query.value(0).toInt();
+    qDebug()<<"При значении " << isBoughtProperty << " получено " << count;
+    return count;// positions;
+}
+
 QList<Record> DataAccessor::getRecordsList(const int planId)
 {
     QList <Record> positions;
@@ -176,6 +192,7 @@ void Plan::setDate(const QString &value)
 {
     date = value;
 }
+
 
 Record::Record(int idA, int planIdA, QString nameA, bool isBoughtA)
 {

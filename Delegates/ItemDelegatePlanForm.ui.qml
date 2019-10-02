@@ -10,6 +10,8 @@ Item {
     property var isCurrent: ListView.isCurrentItem
     property alias areaPlanToRecords: areaPlanToRecords
     property alias buttonPlanDel: buttonPlanDel
+    property alias textCounter: textCounter
+    property alias itemDelegatePlan: itemDelegatePlan
 
     Rectangle {
 
@@ -27,15 +29,27 @@ Item {
             anchors.rightMargin: 5
 
             //clip: true
-
             renderType: Text.NativeRendering
 
             text: model.name
+            anchors.verticalCenterOffset: -textCounter.font.pixelSize / 3
             font.pixelSize: Math.max(Math.min(textPlanName.width / 15,
                                               Constants.MAX_ITEM_FONT_SIZE),
                                      Constants.MIN_ITEM_FONT_SIZE)
         }
 
+        Text {
+            id: textCounter
+            y: 257
+            width: 42
+            height: 18
+            text: qsTr("0/0")
+            anchors.verticalCenterOffset: font.pixelSize / 3 * 2 + 2
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 5
+            font.pixelSize: 12
+        }
 
         MouseArea {
             id: areaPlanToRecords
@@ -67,7 +81,7 @@ Item {
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;height:480;width:640}
+    D{i:0;autoSize:true;height:480;width:640}D{i:4;anchors_x:8}
 }
 ##^##*/
 

@@ -9,6 +9,7 @@ Page {
 
     width: 600
     height: 400
+    property alias viewPlans: viewPlans
 
     property var currentId
 
@@ -18,10 +19,9 @@ Page {
         id: header
 
         text: qsTr("Списки покупок")
-        font.pixelSize: Math.max(
-                            Math.min(width / 10,
-                                     Constants.MAX_HEADER_FONT_SIZE),
-                            Constants.MIN_HEADER_FONT_SIZE)
+        font.pixelSize: Math.max(Math.min(width / 10,
+                                          Constants.MAX_HEADER_FONT_SIZE),
+                                 Constants.MIN_HEADER_FONT_SIZE)
         padding: 10
     }
 
@@ -70,7 +70,7 @@ Page {
             }
         }
 
-        delegate: Delegates.ItemDelegatePlan  {
+        delegate: Delegates.ItemDelegatePlan {
             id: itemDelegatePlan
             height: viewPlans.blockHeight
             width: viewPlans.width
