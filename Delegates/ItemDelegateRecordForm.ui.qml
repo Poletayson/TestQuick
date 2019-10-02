@@ -13,7 +13,7 @@ Item {
     signal recordChanged(var planId)
 
     Rectangle {
-        color: model.isBought ? "#E0FFE0" : "#F0F0F0"
+        color: model.isBought ? Constants.COLOR_GREEN : Constants.COLOR_GRAY
         radius: height / 3
         anchors.fill: parent
 

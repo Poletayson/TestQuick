@@ -52,7 +52,9 @@ public:
     enum Roles {
         DateRole = Qt::UserRole + 1,
         NameRole,
-        IdRole
+        IdRole,
+        CountAllRecords,
+        CountBoughtRecords
     };
 
     explicit PlansList(DataAccessor *daA, QObject *parent = nullptr);
@@ -74,6 +76,8 @@ public slots:
     void fillPlans ();
 
     int getRecordsCount (int row, bool isBoughtProperty);
+
+    bool refreshCounts (const int index);
 
 private:
     QList <Plan> plans;

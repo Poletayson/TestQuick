@@ -39,8 +39,12 @@ QList<Plan> DataAccessor::getPlansList()
     QList <Plan> plans;
     QSqlQuery query ("SELECT *"
                      "FROM plans", dataBase);
+    Plan planPtr;
     while (query.next()) {
-        plans.append(Plan(query.value(0).toInt(), query.value(1).toString(), query.value(2).toString()));//recordLists->add(query.value(1).toString(), query.value(2).toString(), query.value(0).toInt());
+        planPtr = Plan (query.value(0).toInt(), query.value(1).toString(), query.value(2).toString());
+        planPtr.setCountAllRecords(getRecordsCount(planPtr.getId(), false) + getRecordsCount(planPtr.getId(), true));
+        planPtr.setCountBoughtRecords(getRecordsCount(planPtr.getId(), true));
+        plans.append(planPtr);
     }
     return plans;
 }
@@ -52,10 +56,16 @@ Plan DataAccessor::insertPlan(const QString name, const QString date)
                                   "VALUES (:name, :date)");
     query.bindValue(":name", name);
     query.bindValue(":date", date);
-    if (query.exec())
-        return Plan (query.lastInsertId().toInt(), name, date);
-    else
+    Plan planPtr;
+    if (query.exec()){
+        planPtr = Plan (query.lastInsertId().toInt(), name, date);
+        planPtr.setCountAllRecords(getRecordsCount(planPtr.getId(), false) + getRecordsCount(planPtr.getId(), true));
+        planPtr.setCountBoughtRecords(getRecordsCount(planPtr.getId(), true));
+        return planPtr;
+    }
+    else{
         return Plan (-1, "", "");
+    }
 }
 
 bool DataAccessor::deletePlan(int planId)
@@ -85,8 +95,8 @@ int DataAccessor::getRecordsCount(int planId, bool isBoughtProperty)
         qDebug()<<"Ошибка получения списка записей при подсчете: " << query.lastError().text();
     query.next();
     int count = query.value(0).toInt();
-    qDebug()<<"При значении " << isBoughtProperty << " получено " << count;
-    return count;// positions;
+    //qDebug()<<"При значении " << isBoughtProperty << " получено " << count;
+    return count;
 }
 
 QList<Record> DataAccessor::getRecordsList(const int planId)
@@ -191,6 +201,26 @@ QString Plan::getDate() const
 void Plan::setDate(const QString &value)
 {
     date = value;
+}
+
+int Plan::getCountAllRecords() const
+{
+    return countAllRecords;
+}
+
+void Plan::setCountAllRecords(int value)
+{
+    countAllRecords = value;
+}
+
+int Plan::getCountBoughtRecords() const
+{
+    return countBoughtRecords;
+}
+
+void Plan::setCountBoughtRecords(int value)
+{
+    countBoughtRecords = value;
 }
 
 

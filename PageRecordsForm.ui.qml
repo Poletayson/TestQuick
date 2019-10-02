@@ -79,11 +79,10 @@ Page {
 
         clip: true
 
-        highlight: Rectangle {
-            color: "skyblue"
-        }
-        highlightFollowsCurrentItem: true
-
+        //        highlight: Rectangle {
+        //            color: "skyblue"
+        //        }
+        //        highlightFollowsCurrentItem: true
         property int blockHeight: Math.max(Math.min(height / 5.5, 60), 40)
 
         delegate: Delegates.ItemDelegateRecord {

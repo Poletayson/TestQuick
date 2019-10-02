@@ -42,11 +42,12 @@ Page {
 
         clip: true
 
-        highlight: Rectangle {
-            color: "skyblue"
-        }
-        highlightFollowsCurrentItem: true
-
+        //        highlight: Rectangle {
+        //            color: "skyblue"
+        //            radius: height / 4
+        //            anchors.margins: -2
+        //        }
+        //        highlightFollowsCurrentItem: true
         section.property: "date"
         section.delegate: Rectangle {
             width: viewPlans.width

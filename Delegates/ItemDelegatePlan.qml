@@ -2,7 +2,7 @@ import QtQuick 2.0
 
 ItemDelegatePlanForm {
     function setCount (){
-        textCounter.text = plans.getRecordsCount(model.id, true)+ "/" + (plans.getRecordsCount(model.id, true) + plans.getRecordsCount(model.id, false))
+        textCounter.text = model.countBoughtRecords + "/" + model.countAllRecords
     }
 
 //    itemDelegatePlan.onDataChanged: {
@@ -25,7 +25,7 @@ ItemDelegatePlanForm {
                     })
     }
 
-    textCounter.text: plans.getRecordsCount(model.id, true)+ "/" + (plans.getRecordsCount(model.id, true) + plans.getRecordsCount(model.id, false))
+    textCounter.text: model.countBoughtRecords + "/" + model.countAllRecords//plans.getRecordsCount(model.id, true)+ "/" + (plans.getRecordsCount(model.id, true) + plans.getRecordsCount(model.id, false))
 
 
 

@@ -15,7 +15,9 @@ Item {
 
     Rectangle {
 
-        color: "#D5FFD5"
+        color: (model.countAllRecords === model.countBoughtRecords)
+               && model.countAllRecords
+               > 0 ? Constants.COLOR_BLUE : Constants.COLOR_GRAY //"#D5FFD5"
         radius: height / 3
         anchors.fill: parent
 
@@ -44,7 +46,7 @@ Item {
             width: 42
             height: 18
             text: qsTr("0/0")
-            anchors.verticalCenterOffset: font.pixelSize / 3 * 2 + 2
+            anchors.verticalCenterOffset: font.pixelSize / 3 * 2 + 3
             anchors.verticalCenter: parent.verticalCenter
             anchors.left: parent.left
             anchors.leftMargin: 5

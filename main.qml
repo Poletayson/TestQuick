@@ -40,9 +40,7 @@ ApplicationWindow {
             id: pageRecords
 
             onBack: {
-                //pagePlans.viewPlans.itemAtIndex(plan).setCount ()
-                //var i = plan
-                plans.
+                plans.refreshCounts(planIndex)
                 swipeView.currentIndex = 1
             }
 

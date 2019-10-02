@@ -9,16 +9,12 @@ RecordsList::RecordsList(DataAccessor *daA, QObject *parent) : QAbstractListMode
     roles[IsBougtRole] = "isBought";
 
     da = daA;
-//    names.append("Test");
-//    isBoughtMarks.append(false);
-//    lists.append(0);
 }
 
 int RecordsList::rowCount(const QModelIndex &parent) const
 {
-//    if (!parent.isValid())
-//        return 0;
-    return records.count();//names.size();
+    Q_UNUSED (parent)
+    return records.count();
 }
 
 QVariant RecordsList::data(const QModelIndex &index, int role) const
@@ -43,11 +39,6 @@ QVariant RecordsList::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> RecordsList::roleNames() const
 {
-//    QHash<int, QByteArray> roles = QAbstractListModel::roleNames();
-//    roles[NameRole] = "position";
-//    roles[PlanRole] = "listShoping";
-//    roles[IsBougtRole] = "isBought";
-
     return roles;
 }
 
@@ -111,8 +102,8 @@ void RecordsList::add(const QString name, int planId)
         records.append(record);
         endInsertRows();
 
-        QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
-        emit dataChanged(index, createIndex(records.size()-1, 0, static_cast<void *>(0)));
+        QModelIndex index = createIndex(0, 0, static_cast<void *>(nullptr));
+        emit dataChanged(index, createIndex(records.size()-1, 0, static_cast<void *>(nullptr)));
     }
 }
 
@@ -137,12 +128,15 @@ PlansList::PlansList(DataAccessor *daA, QObject *parent) : QAbstractListModel(pa
     roles[NameRole] = "name";
     roles[DateRole] = "date";
     roles[IdRole] = "id";
+    roles[CountAllRecords] = "countAllRecords";
+    roles[CountBoughtRecords] = "countBoughtRecords";
 
     da = daA;
 }
 
 int PlansList::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent)
     return plans.count();
 }
 
@@ -159,6 +153,10 @@ QVariant PlansList::data(const QModelIndex &index, int role) const
         return plans[index.row()].getName();
     case DateRole:
         return plans[index.row()].getDate();
+    case CountAllRecords:
+        return plans.at(index.row()).getCountAllRecords();
+    case CountBoughtRecords:
+        return plans.at(index.row()).getCountBoughtRecords();
     default:
         return QVariant();
     }
@@ -205,14 +203,15 @@ void PlansList::add(const QString name, const QString date)
 {
     Plan plan = da->insertPlan(name, date);
 
+
     if (plan.getId() != -1)
     {
         beginInsertRows(QModelIndex(), plans.size(), plans.size());
         plans.append(plan);
         endInsertRows();
 
-        QModelIndex index = createIndex(0, 0, static_cast<void *>(0));
-        emit dataChanged(index, createIndex(plans.size()-1, 0, static_cast<void *>(0)));
+        QModelIndex index = createIndex(0, 0, static_cast<void *>(nullptr));
+        emit dataChanged(index, createIndex(plans.size()-1, 0, static_cast<void *>(nullptr)));
     }
 }
 
@@ -241,6 +240,21 @@ void PlansList::fillPlans()
 int PlansList::getRecordsCount(int row, bool isBoughtProperty)
 {
     return da->getRecordsCount(row, isBoughtProperty);
+}
+
+bool PlansList::refreshCounts(const int index)
+{
+   QModelIndex indexPlan = createIndex(index, 0, static_cast<void *>(nullptr));
+    if (!indexPlan.isValid()){
+        return false;
+    }
+
+    plans[index].setCountAllRecords(da->getRecordsCount(plans[index].getId(), false) + da->getRecordsCount(plans[index].getId(), true));
+    plans[index].setCountBoughtRecords(da->getRecordsCount(plans[index].getId(), true));
+
+    emit dataChanged(indexPlan, indexPlan, QVector<int>() << CountAllRecords << CountBoughtRecords);
+
+    return true;
 }
 
 

@@ -8,6 +8,7 @@
 class Plan
 {
 public:
+    Plan (){}
     Plan (int idA, QString nameA, QString dateA);
 
     int getId() const;
@@ -19,10 +20,18 @@ public:
     QString getDate() const;
     void setDate(const QString &value);
 
+    int getCountAllRecords() const;
+    void setCountAllRecords(int value);
+
+    int getCountBoughtRecords() const;
+    void setCountBoughtRecords(int value);
+
 private:
     int id;
     QString name;
     QString date;
+    int countAllRecords;
+    int countBoughtRecords;
 };
 
 class Record
