@@ -6,9 +6,7 @@ DataAccessor::DataAccessor()
     dataBase = QSqlDatabase::addDatabase("QSQLITE");
     dataBase.setDatabaseName("plans.sqlite");
     dataBase.open();
-//    sdb.setDatabaseName(qApp->applicationDirPath()
-//                        + QDir::separator()
-//                        + "lang.sqlite" );
+
     QSqlQuery query;
     if (!query.exec("PRAGMA foreign_keys=on"))
         qDebug()<<"Ошибка включения внешних ключей: " << query.lastError().text();
@@ -38,7 +36,7 @@ QList<Plan> DataAccessor::getPlansList()
 {
     QList <Plan> plans;
     QSqlQuery query ("SELECT *"
-                     "FROM plans", dataBase);
+                     "FROM plans");
     Plan planPtr;
     while (query.next()) {
         planPtr = Plan (query.value(0).toInt(), query.value(1).toString(), query.value(2).toString());
@@ -95,7 +93,6 @@ int DataAccessor::getRecordsCount(int planId, bool isBoughtProperty)
         qDebug()<<"Ошибка получения списка записей при подсчете: " << query.lastError().text();
     query.next();
     int count = query.value(0).toInt();
-    //qDebug()<<"При значении " << isBoughtProperty << " получено " << count;
     return count;
 }
 
@@ -124,7 +121,6 @@ Record DataAccessor::insertRecord(const QString name, const bool isBought, const
     query.bindValue(":position_name", name);
     query.bindValue(":is_bought", isBought);
     query.bindValue(":plan_id", planId);
-    //qDebug()<<"Параметры: " << query.boundValues().value(":position_name").toString() << " " << query.boundValues().value(":is_bought").toString() << " " <<query.boundValues().value(":plan_id").toString();
     if (query.exec())
         return Record (query.lastInsertId().toInt(), planId, name, isBought);
     else {

@@ -1,15 +1,14 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.3
+
 import "Constants.js" as Constants
 import "Delegates" as Delegates
 
 Page {
     id: page
-    width: 600
-    height: 400
+
     property alias viewRecords: viewRecords
-    property alias mouseArea: mouseArea
+    property alias mouseArea: mouseAreaBack
 
     property var planId
     property var planIndex
@@ -42,12 +41,12 @@ Page {
             }
 
             border {
-                color: "black"
+                color: Constants.BORDER_COLOR
                 width: 1
             }
 
             MouseArea {
-                id: mouseArea
+                id: mouseAreaBack
                 anchors.fill: parent
             }
         }
@@ -61,7 +60,8 @@ Page {
             anchors.verticalCenter: parent.verticalCenter
 
             text: headerText
-            font.pixelSize: Math.max(Math.min(header.width / 15,
+            //fontsize depends of the textlength
+            font.pixelSize: Math.max(Math.min(header.width / (headerText.length / 1.2),
                                               Constants.MAX_HEADER_FONT_SIZE),
                                      Constants.MIN_HEADER_FONT_SIZE)
         }
@@ -70,23 +70,23 @@ Page {
     ListView {
         id: viewRecords
 
-        anchors.topMargin: Constants.SPACING
+        property int blockHeight: Math.max(Math.min(height / 5.5, 60), 40)
+
         anchors.fill: parent
+        anchors.rightMargin: 10
+        anchors.leftMargin: 10
+        anchors.bottomMargin: 10
+        anchors.topMargin: Constants.SPACING
 
         spacing: Constants.SPACING
 
-        model: records
-
         clip: true
 
-        //        highlight: Rectangle {
-        //            color: "skyblue"
-        //        }
-        //        highlightFollowsCurrentItem: true
-        property int blockHeight: Math.max(Math.min(height / 5.5, 60), 40)
+        model: records
 
         delegate: Delegates.ItemDelegateRecord {
             id: itemDelegateRecord
+
             height: viewRecords.blockHeight
             width: viewRecords.width
         }

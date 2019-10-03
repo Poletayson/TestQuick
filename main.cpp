@@ -7,8 +7,6 @@
 
 int main(int argc, char *argv[])
 {
-    qputenv("QT_IM_MODULE", QByteArray("qtvirtualkeyboard"));
-
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
     QGuiApplication app(argc, argv);
@@ -22,15 +20,9 @@ int main(int argc, char *argv[])
     }, Qt::QueuedConnection);
 
 
-//    QQuickView view;
     DataAccessor *da = new DataAccessor ();
     QAbstractListModel *records = new RecordsList (da);
     QAbstractListModel *plans = new PlansList (da);
-    //records.add("Хлеб");
-//    view.rootContext()->setContextProperty("records", &records);    //set records model
-//     view.setSource(QUrl (QStringLiteral("qrc:/main.qml")));
-//     view.show();
-
 
     engine.rootContext()->setContextProperty("records", records);
     engine.rootContext()->setContextProperty("plans", plans);

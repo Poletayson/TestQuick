@@ -1,5 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
+
 import "../Constants.js" as Constants
 
 Rectangle {
@@ -37,11 +38,9 @@ Rectangle {
 
             clip: true
 
-            placeholderText: "Название списка"
-
-            maximumLength: 30
-
             text: ""
+            placeholderText: "Название списка"
+            maximumLength: 30
 
             font.pixelSize: Math.max(Math.min(Math.min(height * 0.6,
                                                        width / 15),
@@ -59,7 +58,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
             icon.source: "/Images/plus.png"
 
-            enabled: textInputAddingName.text.length > 0 ? true : false
+            enabled: textInputAddingName.length > 0 ? true : false
 
             background: Rectangle {
 

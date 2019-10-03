@@ -5,10 +5,6 @@ ItemDelegatePlanForm {
         textCounter.text = model.countBoughtRecords + "/" + model.countAllRecords
     }
 
-//    itemDelegatePlan.onDataChanged: {
-//        setCount()
-//    }
-
     buttonPlanDel.onClicked: {
         plans.removeRow(model.index)
     }
@@ -25,10 +21,9 @@ ItemDelegatePlanForm {
                     })
     }
 
-    textCounter.text: model.countBoughtRecords + "/" + model.countAllRecords//plans.getRecordsCount(model.id, true)+ "/" + (plans.getRecordsCount(model.id, true) + plans.getRecordsCount(model.id, false))
-
-
-
+    textCounter.text: {
+        model.countBoughtRecords + "/" + model.countAllRecords
+    }
 
 }
 

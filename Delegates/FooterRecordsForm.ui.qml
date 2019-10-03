@@ -1,6 +1,6 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.3
+
 import "../Constants.js" as Constants
 
 Rectangle {
@@ -22,7 +22,8 @@ Rectangle {
         radius: height / 3
         
         border {
-            color: "black"
+
+            color: Constants.BORDER_COLOR
             width: 1
         }
         
@@ -37,13 +38,11 @@ Rectangle {
             height: parent.height / 1.5
             
             clip: true
-            
-            placeholderText: "Название товара"
-            
-            maximumLength: 30
-            
+
             text: ""
-            
+            placeholderText: "Название товара"
+            maximumLength: 30
+
             font.pixelSize: Math.max(Math.min(
                                          Math.min(height * 0.6,
                                                   width / 15),
@@ -64,7 +63,7 @@ Rectangle {
             enabled: textInputAddingName.text.length > 0 ? true : false
             
             background: Rectangle {
-                
+
                 width: buttonRecordAdd.width
                 height: buttonRecordAdd.height
                 
@@ -74,7 +73,6 @@ Rectangle {
                 radius: width / 2
             }
             
-
         }
     }
 }

@@ -30,7 +30,6 @@ Item {
             anchors.right: buttonPlanDel.left
             anchors.rightMargin: 5
 
-            //clip: true
             renderType: Text.NativeRendering
 
             text: model.name
@@ -42,9 +41,7 @@ Item {
 
         Text {
             id: textCounter
-            y: 257
-            width: 42
-            height: 18
+
             text: qsTr("0/0")
             anchors.verticalCenterOffset: font.pixelSize / 3 * 2 + 3
             anchors.verticalCenter: parent.verticalCenter

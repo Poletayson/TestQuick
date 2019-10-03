@@ -1,16 +1,13 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-import QtQuick.Layouts 1.3
+
 import "../Constants.js" as Constants
 
 Item {
     id: itemDelegateRecord
 
-    property var isCurrent: ListView.isCurrentItem
     property alias buttonPositionDel: buttonPositionDel
-    property alias mouseArea: mouseArea
-
-    signal recordChanged(var planId)
+    property alias mouseArea: mouseAreaRecord
 
     Rectangle {
         color: model.isBought ? Constants.COLOR_GREEN : Constants.COLOR_GRAY
@@ -26,7 +23,6 @@ Item {
             anchors.right: buttonPositionDel.left
             anchors.rightMargin: 5
 
-            //clip: true
             renderType: Text.NativeRendering
             text: model.name
             font.pixelSize: Math.max(Math.min(textRecordName.width / 15,
@@ -35,7 +31,8 @@ Item {
         }
 
         MouseArea {
-            id: mouseArea
+            id: mouseAreaRecord
+
             anchors.fill: parent
         }
 

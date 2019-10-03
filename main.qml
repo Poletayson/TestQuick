@@ -1,15 +1,13 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
 
-//import QtQuick.VirtualKeyboard 2.4
-
 ApplicationWindow {
     id: window
+
     visible: true
     width: 640
     height: 480
     title: qsTr("Списки покупок")
-
 
     SwipeView {
         id: swipeView
@@ -21,7 +19,9 @@ ApplicationWindow {
         PageStart {
             id: pageStart
 
-            onStartClicked: swipeView.currentIndex = 1
+            onStartClicked: {
+                swipeView.currentIndex = 1
+            }
         }
 
         PagePlans {
@@ -43,8 +43,6 @@ ApplicationWindow {
                 plans.refreshCounts(planIndex)
                 swipeView.currentIndex = 1
             }
-
-
         }
 
     }

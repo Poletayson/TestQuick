@@ -4,7 +4,6 @@
         <file>PagePlansForm.ui.qml</file>
         <file>PageRecordsForm.ui.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>Constants.qml</file>
         <file>Constants.js</file>
         <file>PageStart.qml</file>
         <file>PageStartForm.ui.qml</file>
@@ -19,5 +18,5 @@
         <file>Delegates/FooterPlansForm.ui.qml</file>
         <file>Delegates/FooterPlans.qml</file>
     </qresource>
-    <qresource lang="QML" prefix="/Delegates"/>
+    <qresource prefix="/Delegates" lang="QML"/>
 </RCC>

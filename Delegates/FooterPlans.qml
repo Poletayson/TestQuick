@@ -4,7 +4,7 @@ FooterPlansForm {
     buttonPlanAdd.onClicked: {
             plans.add(textInputAddingName.text.toString(),
                       Qt.formatDateTime(new Date(), "yyyy-MM-dd"))
-            textInputAddingName.text = ""
+            textInputAddingName.clear()
     }
 
 }

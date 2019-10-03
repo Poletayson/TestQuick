@@ -1,17 +1,13 @@
 import QtQuick 2.13
 import QtQuick.Controls 2.13
-//import QtQuick.Layouts 1.3
+
 import "Constants.js" as Constants
 import "Delegates" as Delegates
 
 Page {
     id: page
 
-    width: 600
-    height: 400
     property alias viewPlans: viewPlans
-
-    property var currentId
 
     signal planClicked(var plan)
 
@@ -28,7 +24,10 @@ Page {
     ListView {
         id: viewPlans
 
-        property int blockHeight: Math.max(Math.min(height / 5.5, 60), 40)
+        property int blockHeight: Math.max(Math.min(
+                                               height / 5.5,
+                                               60),
+                                           40)
 
         anchors.rightMargin: 10
         anchors.leftMargin: 10
@@ -37,17 +36,11 @@ Page {
         anchors.fill: parent
 
         spacing: Constants.SPACING
+        clip: true
 
         model: plans
 
-        clip: true
-
-        //        highlight: Rectangle {
-        //            color: "skyblue"
-        //            radius: height / 4
-        //            anchors.margins: -2
-        //        }
-        //        highlightFollowsCurrentItem: true
+        //splitting lists by dates
         section.property: "date"
         section.delegate: Rectangle {
             width: viewPlans.width
@@ -62,6 +55,7 @@ Page {
                 border.width: 1
 
                 color: "lightgray"
+
                 Text {
                     anchors.centerIn: parent
                     renderType: Text.NativeRendering
@@ -73,6 +67,7 @@ Page {
 
         delegate: Delegates.ItemDelegatePlan {
             id: itemDelegatePlan
+
             height: viewPlans.blockHeight
             width: viewPlans.width
         }

@@ -6,7 +6,6 @@ ItemDelegateRecordForm {
     }
     mouseArea.onDoubleClicked: {
         model.isBought = model.isBought ? false : true
-        recordChanged(model.plan)
     }
 
     buttonPositionDel.onClicked: {

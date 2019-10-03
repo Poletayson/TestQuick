@@ -64,8 +64,6 @@ public:
     virtual QHash<int, QByteArray> roleNames() const;
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role);
 
-
-
     virtual Qt::ItemFlags flags(const QModelIndex &index) const;
 
 signals:
@@ -74,9 +72,7 @@ public slots:
     void add(const QString name, const QString date);
     virtual bool removeRow(int row, const QModelIndex &parent = QModelIndex());
     void fillPlans ();
-
     int getRecordsCount (int row, bool isBoughtProperty);
-
     bool refreshCounts (const int index);
 
 private:

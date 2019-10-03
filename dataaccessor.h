@@ -1,7 +1,6 @@
 #ifndef DATAACCESSOR_H
 #define DATAACCESSOR_H
 
-//#include "recordlist.h"
 #include <QtSql>
 #include <QDebug>
 
@@ -75,8 +74,6 @@ public:
 
 private:
     QSqlDatabase dataBase;
-
-    //bool deleteRecords (int planId);
 };
 
 #endif // DATAACCESSOR_H
